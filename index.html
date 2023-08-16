@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Metas -->
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta
+      name="title"
+      content="ShorestRoute | Free Route Planner for Multiple Stops"
+    />
+    <meta
+      name="description"
+      content="ShortestRoute finds for you the optimal route and directions for two or more stops on a map including routing profiles like walking, biking and car."
+    />
+    <meta
+      name="keywords"
+      content="free, open, router, route planning, trip planner, transport planning, interactive maps solution, find the shortest route, multiple waypoint optimization, get optimized and accurate routing solutions, exact travel time and directions"
+    />
+    <meta name="robots" content="index, follow" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="language" content="English" />
+
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./resources/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./resources/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="./resources/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="./resources/favicon/site.webmanifest" />
+    <!-- Title -->
+    <title>ShortestRoute v0.9</title>
+    <!-- Leaflet -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.min.js"></script>
+    <!-- Leaflet Plugins -->
+    <script src="./scripts/leaflet-providers.js"></script>
+    <script src="./scripts/leaflet.rainviewer.js"></script>
+    <script src="./scripts/Leaflet.fullscreen.min.js"></script>
+    <script src="./scripts/leaflet-beautify-marker-icon.js"></script>
+    <script src="./scripts/leaflet.control.detaillevel.js"></script>
+    <script src="./scripts/leaflet-routing-machine.js"></script>
+    <script
+      src="./scripts/Leaflet.OSMBuildings.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="./scripts/Leaflet.Control.Locate.min.js"></script>
+    <script src="./scripts/leaflet-minimap.js"></script>
+    <script src="./scripts/leaflet-simple-map-screenshoter.min.js"></script>
+    <link href=" ./styles/leaflet-beautify-marker-icon.css" rel="stylesheet" />
+    <link href=" ./styles/Leaflet.Control.Locate.min.css" rel="stylesheet" />
+    <link href=" ./styles/leaflet-minimap.css" rel="stylesheet" />
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"
+    />
+    <!-- Fontawesome-->
+    <script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.3.0/js/fontawesome.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.3.0/css/fontawesome.min.css"
+      rel="stylesheet"
+    />
+    <!-- Axios -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/axios@1.3/dist/axios.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- ChartJS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Papaparse -->
+    <script src="./scripts/ext.papaparse.js"></script>
+    <!-- HTML2PDF -->
+    <script src="./scripts/ext.html2pdf.js"></script>
+    <!-- 2GPX -->
+    <script src="./scripts/ext.togpx.js"></script>
+    <!-- Captcha -->
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-hcaptcha"></script>
+    <!-- CookieConsent CSS -->
+    <link rel="stylesheet" href="./styles/ext.cookieconsent.css" />
+    <!-- Analytics -->
+    <script
+      data-goatcounter="https://shortestroute.goatcounter.com/count"
+      async
+      src="//gc.zgo.at/count.js"
+    ></script>
+    <!-- Custom CSS -->
+    <style>
+@font-face{font-family:"Open Sans";src:url("./styles/Fonts/Open_Sans/static/OpenSans-Regular.ttf");font-weight:normal;font-style:normal;}@font-face{font-family:"Roboto";src:url("./styles/Fonts/Roboto/Roboto-Regular.ttf");font-weight:normal;font-style:normal;}#map{position:absolute;}#map{top:0;}#map{bottom:0;}[class~=tag]{margin-right:1rem;}#map{width:100%;}#map{z-index:-5;}[class~=btn-group-vehicle],[class~=btn-group-planning],[class~=btn-group-map],.btn-group-settings{position:relative;}#locIcon{color:#7c7c7c;}#infoBtn{border-left-width:medium;}#infoBtn{border-bottom-width:medium;}[class~=controllBtns]{min-width:2rem;}#infoBtn{border-right-width:medium;}#infoBtn{border-top-width:medium;}[class~=controllBtns]{min-height:2rem;}#infoBtn{border-left-style:none;}*{box-sizing:border-box;}[class~=leaflet-control-simpleMapScreenshoter][class~=leaflet-control]{display:none;}[class~=svgGreen]{filter:invert(41%) sepia(80%) saturate(455%) hue-rotate(71deg) brightness(99%) contrast(85%);}#infoBtn{border-bottom-style:none;}[class~=svgGreen]{transform:scaleX(-1);}[class~=navbar-toggler-icon]{background-image:url("/resources/svg/info-solid.svg") !important;}[class~=navbar-toggler-icon]{background-size:11.25pt;}[class~=navbar-toggler-icon]{filter:invert(55%);}body{margin-left:0;}#infoBtn{border-right-style:none;}[class~=active-cont]{margin-left:400px;}[class~=dropdown-menu],[class~=card]{position:absolute;}[class~=dropdown-menu] > *{display:flex;}#infoBtn{border-top-style:none;}#infoBtn{border-left-color:currentColor;}[class~=dropdown-menu] > *{flex-direction:row;}[class~=badgeLogo]{font-size:smaller !important;}#infoBtn{border-bottom-color:currentColor;}[class~=nav-rotated]{transform:rotate(-180deg);}.navbar-toggle{padding-left:3px !important;}*{font-family:"Open Sans","Roboto",Arial;}#infoBtn{border-right-color:currentColor;}.navbar-toggle{padding-bottom:3pt !important;}body{margin-bottom:0;}#infoBtn{border-top-color:currentColor;}#infoBtn{border-image:none;}#smallRouteBtn,#smallPinBtn,#locationBtn,#smallDelBtn,#smallNavBtn,#smallReturnBtn{visibility:hidden;}body{margin-right:0;}.navbar-toggle{padding-right:3px !important;}.navbar-toggle{padding-top:3pt !important;}.searchContainer{width:auto;}[class~=card]{visibility:visible;}#actionBtns > *{border-left-width:.010416667in;}#actionBtns > *{border-bottom-width:.010416667in;}#actionBtns > *{border-right-width:.010416667in;}#actionBtns > *{border-top-width:.010416667in;}#actionBtns > *{border-left-style:solid;}#actionBtns > *{border-bottom-style:solid;}body{margin-top:0;}[class~=card]{margin-left:auto;}body{padding-left:0;}body{padding-bottom:0;}#infoBtn:focus{outline:none !important;}[class~=card]{margin-bottom:auto;}#actionBtns > *{border-right-style:solid;}#actionBtns > *{border-top-style:solid;}[class~=card]{margin-right:auto;}#actionBtns > *{border-left-color:lightgray;}[class~=card]{margin-top:auto;}#actionBtns > *{border-bottom-color:lightgray;}#actionBtns > *{border-right-color:lightgray;}#actionBtns > *{border-top-color:lightgray;}[class~=leaflet-bar][class~=leaflet-control][class~=leaflet-control-custom],.leaflet-routing-container.leaflet-bar.leaflet-control,[class~=leaflet-control-zoom][class~=leaflet-bar][class~=leaflet-control],.leaflet-control-rainviewer.leaflet-bar.leaflet-control{display:none;}#actionBtns > *{border-image:none;}[class~=card]{width:20vw;}#actionBtns2 > *{border-left-width:.010416667in;}#actionBtns2 > *{border-bottom-width:.010416667in;}[class~=card]{border-left-width:medium;}#actionBtns2 > *{border-right-width:.010416667in;}#actionBtns2 > *{border-top-width:.010416667in;}[class~=card]{border-bottom-width:medium;}#actionBtns2 > *{border-left-style:solid;}#actionBtns2 > *{border-bottom-style:solid;}#actionBtns2 > *{border-right-style:solid;}#actionBtns2 > *{border-top-style:solid;}#actionBtns2 > *{border-left-color:lightgray;}[class~=card]{border-right-width:medium;}[class~=card]{border-top-width:medium;}#actionBtns2 > *{border-bottom-color:lightgray;}#actionBtns2 > *{border-right-color:lightgray;}[class~=card]{border-left-style:none;}#actionBtns2 > *{border-top-color:lightgray;}[class~=card]{border-bottom-style:none;}[class~=card]{border-right-style:none;}#actionBtns2 > *{border-image:none;}[class~=card]{border-top-style:none;}[class~=card]{border-left-color:currentColor;}[class~=card]{border-bottom-color:currentColor;}#filterInput{border-left-width:.010416667in;}#filterInput{border-bottom-width:.010416667in;}[class~=card]{border-right-color:currentColor;}#filterInput{border-right-width:.010416667in;}#filterInput{border-top-width:.010416667in;}#filterInput{border-left-style:solid;}#filterInput{border-bottom-style:solid;}#filterInput{border-right-style:solid;}#filterInput{border-top-style:solid;}[class~=card]{border-top-color:currentColor;}[class~=card]{border-image:none;}#filterInput{border-left-color:lightgray;}body{padding-right:0;}#filterInput{border-bottom-color:lightgray;}#filterInput{border-right-color:lightgray;}[class~=card]{border-radius:0;}#filterInput{border-top-color:lightgray;}#filterInput{border-image:none;}[class~=card]{z-index:25 !important;}#sortFilterBtn{border-left-width:.010416667in;}#sortFilterBtn{border-bottom-width:.010416667in;}#sortFilterBtn{border-right-width:.010416667in;}#sortFilterBtn{border-top-width:.010416667in;}[class~=side-navbar],body{padding-top:0;}[class~=side-navbar]{z-index:2;}[class~=side-navbar]{width:25%;}#sortFilterBtn{border-left-style:solid;}[class~=side-navbar]{margin-left:-100%;}[class~=side-navbar]{padding-left:.5rem;}[class~=side-navbar]{padding-bottom:4.375pc;}[class~=side-navbar]{padding-right:.5rem;}#sortFilterBtn{border-bottom-style:solid;}#sortFilterBtn{border-right-style:solid;}#sortFilterBtn{border-top-style:solid;}#sortFilterBtn{border-left-color:lightgray;}#sortFilterBtn{border-bottom-color:lightgray;}#sortFilterBtn{border-right-color:lightgray;}#sortFilterBtn{border-top-color:lightgray;}#sortFilterBtn{border-image:none;}#deleteFilterBtn{border-left-width:.010416667in;}[class~=side-navbar]{height:100vh;}#deleteFilterBtn{border-bottom-width:.010416667in;}#deleteFilterBtn{border-right-width:.010416667in;}#deleteFilterBtn{border-top-width:.010416667in;}body{overflow-x:hidden;}[class~=side-navbar]{opacity:.92;}#deleteFilterBtn{border-left-style:solid;}i{cursor:pointer;}#deleteFilterBtn{border-bottom-style:solid;}#deleteFilterBtn{border-right-style:solid;}[class~=side-navbar]{position:fixed;}#deleteFilterBtn{border-top-style:solid;}#deleteFilterBtn{border-left-color:lightgray;}#deleteFilterBtn{border-bottom-color:lightgray;}#deleteFilterBtn{border-right-color:lightgray;}#deleteFilterBtn{border-top-color:lightgray;}#deleteFilterBtn{border-image:none;}#dropdownBtn{border-right-width:.010416667in;}[class~=side-navbar],[class~=my-container]{transition:.8s;}#dropdownBtn{border-right-style:solid;}[class~=side-navbar]{box-shadow:0 .5rem 1rem rgba(0,0,0,.15),inset 0 -1px 0 rgba(255,255,255,.15);}button{min-width:2.5rem;}#dropdownBtn{border-right-color:white;}#dropdownBtn{border-image:none;}#mapItems > *{padding-left:.25rem;}#mapItems > *{padding-bottom:.25rem;}button{min-height:2.5rem;}button{opacity:.8;}.backgroundImage{padding-bottom:7.5pt;}#mapItems > *{padding-right:.25rem;}.backgroundImage{opacity:.9;}#mapItems > *{padding-top:.25rem;}#contactAnchor{text-decoration:none;}.backgroundImage{filter:invert(75%);}#contactAnchor{color:inherit;}.sidebarActionText,#container,#logo,#actionArea{display:flex;}#searchBar{width:20vw;}[class~=nav-link]{background-color:white;}#container{flex-direction:column;}#actionArea,#container,.sidebarActionText{justify-content:center;}[class~=leaflet-control-locate][class~=leaflet-bar][class~=leaflet-control]{display:none;}.sidebarActionText,#actionArea,#container{align-items:center;}nav{z-index:2;}#container{margin-left:auto;}#container{margin-bottom:auto;}#container{margin-right:auto;}#container{margin-top:auto;}#container{top:0;}#container{bottom:0;}#container{left:0;}[class~=active-nav]{margin-left:0;}#container{right:0;}[class~=bi][class~=bi-x-square]{font-weight:bold;}#sidebar-wrapper{overflow-y:scroll;}#sidebar-wrapper{overflow-x:hidden;}.listgroup{position:relative;}#infoBtn:focus,#infoBtn:active{box-shadow:none;}#accordionPanelsStayOpenExample{width:inherit;}#accordionPanelsStayOpenExample{padding-left:0;}[class~=carou-padding],#accordionPanelsStayOpenExample,.sidebarActionText > *{padding-bottom:0;}#accordionPanelsStayOpenExample{padding-right:0;}[class~=carou-padding],#accordionPanelsStayOpenExample,.sidebarActionText > *{padding-top:0;}.listgroup{visibility:visible;}.sidebarActionText,#actionArea{flex-direction:row;}nav{opacity:.92;}.listgroup{z-index:1;}.listgroup{min-width:20%;}#badgeMarkerCount{z-index:30;}.summaryTitle{text-transform:capitalize;}#badgeMarkerCount{margin-left:3px;}nav{box-shadow:0 .5rem 1rem rgba(0,0,0,.15),inset 0 -.0625pc 0 rgba(255,255,255,.15);}.sidebarActionText{font-size:smaller;}.sidebarActionText > *{padding-left:.1rem;}.sidebarActionText > *{padding-right:.1rem;}[class~=carou-padding]{padding-left:1rem;}[class~=carou-padding]{padding-right:1rem;}#infoBtn:active{outline:none !important;}#ppAnchor:hover,#tosAnchor:hover{cursor:pointer;}@media screen and (max-width: 425px){#deleteBtn,#searchBtn,#featBtns,#logo,#actionArea{display:none;}.card{width:52vw;}#smallNavBtn,#smallDelBtn,#smallPinBtn,#smallReturnBtn,#smallRouteBtn{visibility:visible;}#actionBtns,#actionBtns2{width:90%;}#searchBar{width:30vw;}#infoBtn{padding-left:0;}#infoBtn{padding-bottom:0;}#infoBtn{padding-right:0;}#infoBtn{padding-top:0;}#configArea{margin-top:.75rem;}#toastField{visibility:hidden;}.side-navbar{width:100%;}}@media screen and (min-width: 426px) and (max-width: 750px){[class~=card]{width:48vw;}#actionArea,#deleteBtn,#logo,#searchBtn{display:none;}[class~=side-navbar]{width:100%;}#smallDelBtn,#smallNavBtn,#smallRouteBtn,#smallReturnBtn,#smallPinBtn{visibility:visible;}#actionBtns,#actionBtns2{width:90%;}#searchBar{width:28vw;}#infoBtn{margin-left:0;}#infoBtn{margin-bottom:0;}#infoBtn{margin-right:0;}#infoBtn{margin-top:0;}#infoBtn{padding-left:0;}#infoBtn{padding-bottom:0;}#infoBtn{padding-right:0;}#infoBtn{padding-top:0;}}@media screen and (min-width: 751px) and (max-width: 1000px){#logo{display:none;}#smallDelBtn{visibility:visible;}.card{width:32%;}.side-navbar{width:60%;}#searchBar{width:auto;}}@media screen and (min-width: 1001px) and (max-width: 1200px){[class~=card]{width:26%;}[class~=side-navbar]{width:40%;}#searchBar{width:auto;}}@media screen and (min-width: 1201px) and (max-width: 1500px){[class~=card]{width:26%;}[class~=side-navbar]{width:35%;}#searchBar{width:23vw;}}
+    </style>
+  </head>
+
+  <body>
+    <!-- Leaflet Map -->
+    <div id="map"></div>
+    <!-- Navbar -->
+    <nav class="navbar bg-light" id="navbar">
+      <div class="container-fluid">
+        <button class="navbar-toggler ms-1 me-3" type="button" id="infoBtn">
+          <span class="navbar-toggler-icon" id="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand d-row me-5 ms-0" id="logo">
+          <img
+            src="./resources/svg/leaf.svg"
+            class="svgGreen me-2"
+            alt="logo leaf"
+            height="30"
+            width="30"
+            id="logoLeaf"
+          />
+          <div class="logoText d-flex d-row">
+            <b>ShortestRoute</b>
+            <h6>
+              <span class="badge text-bg-success ms-2 text-wrap badgeLogo">
+                v0.9
+              </span>
+            </h6>
+          </div>
+        </a>
+        <!-- Search -->
+        <div class="searchContainer me-auto ms-auto">
+          <div class="search" id="search">
+            <form class="input-group" role="search">
+              <input
+                type="text"
+                class="form-control"
+                id="searchBar"
+                placeholder="Search.."
+                aria-label="Search.."
+                onkeypress="Javascript: if (event.keyCode==13) getGeoData(event);"
+              />
+              <button
+                type="button"
+                class="btn btn btn-primary"
+                id="searchBtn"
+                onclick="getGeoData(event)"
+              >
+                <i class="bi bi-search"></i>
+              </button>
+              <button
+                type="button"
+                class="btn btn btn-primary"
+                id="deleteBtn"
+                onclick="clearSearchBar()"
+              >
+                <i class="bi bi-backspace-fill"></i>
+              </button>
+              <button
+                type="button"
+                class="btn btn btn-primary"
+                id="smallPinBtn"
+                onclick="actDeactMarking()"
+              >
+                <i class="bi bi-geo-alt-fill"></i>
+              </button>
+              <button
+                type="button"
+                class="btn btn btn-primary"
+                id="smallRouteBtn"
+                onclick="getRoute()"
+              >
+                <i class="bi bi-bounding-box"></i>
+              </button>
+              <button
+                type="button"
+                class="btn btn btn-primary"
+                id="smallNavBtn"
+                onclick="createMapsUrl()"
+                disabled
+              >
+                <i class="bi bi-sign-turn-right-fill"></i>
+              </button>
+              <button
+                type="button"
+                class="btn btn btn-primary"
+                id="smallReturnBtn"
+                onclick="goBack()"
+                disabled
+              >
+                <i class="bi bi-arrow-clockwise"></i>
+              </button>
+            </form>
+          </div>
+          <!-- Search results -->
+          <div class="card" id="card"></div>
+        </div>
+        <!-- Navbar: Toggler -->
+        <div class="me-auto ms-auto" id="featBtns">
+          <button
+            type="button"
+            class="btn btn-light"
+            id="cryptoBtn"
+            data-bs-toggle="modal"
+            data-bs-target="#donateFrame"
+          >
+            <i class="bi bi-currency-bitcoin"></i>
+          </button>
+          <a
+            href="https://liberapay.com/ShortestRoute/donate"
+            target="_blank"
+            style="color: inherit; text-decoration: inherit"
+          >
+            <button type="button" class="btn btn-light" id="donateBtn">
+              <i class="bi bi-heart"></i></button
+          ></a>
+          <button type="button" class="btn btn-light" id="nightBtn">
+            <i class="bi bi-moon-stars-fill" id="moonIcon"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+    <!-- Toasts -->
+    <div
+      class="toast-container position-fixed bottom-0 start-50 p-1"
+      id="toastField"
+    ></div>
+    <!-- Captcha -->
+    <div
+      class="modal fade"
+      id="captchaFrame"
+      tabindex="-1"
+      aria-labelledby="captchaModal"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" style="width: 340px">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="captchaModal">Are You a Human?</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              id="closeCaptchaModal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <h-captcha
+              id="captchaStuff"
+              site-key="a5142f2d-75af-427b-97d8-ca8fe990b4ed"
+              size="normal"
+              tabindex="0"
+              theme="dark"
+            ></h-captcha>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Donate -->
+    <div
+      class="modal fade"
+      id="donateFrame"
+      tabindex="-1"
+      aria-labelledby="donateModal"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="donateModal">
+              Donate Cryptocurrency <3
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              id="closeCryptoModal"
+            ></button>
+          </div>
+          <div class="modal-body d-flex d-row">
+            <form class="form-floating w-100 me-1">
+              <input
+                type="text"
+                class="form-control rounded-3"
+                id="btcAdd"
+                value="bc1qws3sv2w7t9tfe2gv0nh0999zfjgnqeamcgp8rj"
+                readonly
+              />
+              <label for="btcAdd">Bitcoin (BTC)</label>
+            </form>
+            <button
+              class="btn btn-primary"
+              onclick="copyTextToClipboard(this); return false"
+              id="bc1qws3sv2w7t9tfe2gv0nh0999zfjgnqeamcgp8rj"
+              data-bs-toggle="tooltip"
+              data-bs-title="Copy"
+            >
+              <i class="bi bi-clipboard-fill"></i>
+            </button>
+          </div>
+          <div class="modal-body d-flex d-row">
+            <form class="form-floating w-100 me-1">
+              <input
+                type="text"
+                class="form-control rounded-3"
+                id="moneroAdd"
+                value="83XmjygiBKXCMSKyqwsS9JKGqVyWpU5ByH3aDpDxHLbz8gLxNRcJoFg1bS6S1ojQNUL67vw5wApwzb97ULv2zUb4KmF4pok"
+                readonly
+              />
+              <label for="moneroAdd">Monero (XMR)</label>
+            </form>
+            <button
+              class="btn btn-primary"
+              onclick="copyTextToClipboard(this); return false"
+              id="83XmjygiBKXCMSKyqwsS9JKGqVyWpU5ByH3aDpDxHLbz8gLxNRcJoFg1bS6S1ojQNUL67vw5wApwzb97ULv2zUb4KmF4pok"
+              data-bs-toggle="tooltip"
+              data-bs-title="Copy"
+            >
+              <i class="bi bi-clipboard-fill"></i>
+            </button>
+          </div>
+          <div class="modal-body d-flex d-row">
+            <form class="form-floating w-100 me-1">
+              <input
+                type="text"
+                class="form-control rounded-3"
+                id="liteAdd"
+                value="ltc1q666y6ftnpzfghzmdqe8te7qsf4zg80r959938d"
+                readonly
+              />
+              <label for="liteAdd">Litecoin (LTC)</label>
+            </form>
+            <button
+              class="btn btn-primary"
+              onclick="copyTextToClipboard(this); return false"
+              id="ltc1q666y6ftnpzfghzmdqe8te7qsf4zg80r959938d"
+              data-bs-toggle="tooltip"
+              data-bs-title="Copy"
+            >
+              <i class="bi bi-clipboard-fill"></i>
+            </button>
+          </div>
+          <div class="modal-body d-flex d-row">
+            <form class="form-floating w-100 me-1">
+              <input
+                type="text"
+                class="form-control rounded-3"
+                id="wowAdd"
+                value="WW2staiQPMw5oLguhs93utQ5nJaA49PNqTgas4MDqat2QyLVQcmTnrV5SmaGoqG7qeP1snZ3JNazkMuz4ERf1kJe1h9CLyidd"
+                readonly
+              />
+              <label for="wowAdd">Wownero (WOW)</label>
+            </form>
+            <button
+              class="btn btn-primary"
+              onclick="copyTextToClipboard(this); return false"
+              id="WW2staiQPMw5oLguhs93utQ5nJaA49PNqTgas4MDqat2QyLVQcmTnrV5SmaGoqG7qeP1snZ3JNazkMuz4ERf1kJe1h9CLyidd"
+              data-bs-toggle="tooltip"
+              data-bs-title="Copy"
+            >
+              <i class="bi bi-clipboard-fill"></i>
+            </button>
+          </div>
+          <div class="modal-body d-flex d-row">
+            <form class="form-floating w-100 me-1">
+              <input
+                type="text"
+                class="form-control rounded-3"
+                id="firoAdd"
+                value="a66xTw4YiffY2tY2NjJwf9WQ475BKo8K4d"
+                readonly
+              />
+              <label for="firoAdd">Firo (FIRO)</label>
+            </form>
+            <button
+              class="btn btn-primary"
+              onclick="copyTextToClipboard(this); return false"
+              id="a66xTw4YiffY2tY2NjJwf9WQ475BKo8K4d"
+              data-bs-toggle="tooltip"
+              data-bs-title="Copy"
+            >
+              <i class="bi bi-clipboard-fill"></i>
+            </button>
+          </div>
+          <div class="modal-body d-flex d-row">
+            <form class="form-floating w-100 me-1">
+              <input
+                type="text"
+                class="form-control rounded-3"
+                id="bchAdd"
+                value="qzq3er0c0cc0hnfs46v4wrmcyrxjqeh7fy9szfcghu"
+                readonly
+              />
+              <label for="bchAdd">BitcoinCash (BCH)</label>
+            </form>
+            <button
+              class="btn btn-primary"
+              onclick="copyTextToClipboard(this); return false"
+              id="qzq3er0c0cc0hnfs46v4wrmcyrxjqeh7fy9szfcghu"
+              data-bs-toggle="tooltip"
+              data-bs-title="Copy"
+            >
+              <i class="bi bi-clipboard-fill"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Upload -->
+    <div
+      class="modal fade"
+      id="upload"
+      tabindex="-1"
+      aria-labelledby="uploadModal"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" id="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Import Address Data</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              id="closeModal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <label for="formFileLg" class="form-label"
+              >Import a comma-seperated file (.CSV):
+            </label>
+            <input
+              class="form-control form-control-lg"
+              id="csvInput"
+              type="file"
+            />
+          </div>
+          <div class="modal-body">
+            Entry format: "Street, Place, Zip, Country" (<a
+              href="./resources/data/addresses.csv"
+              download
+              >template</a
+            >)
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ToS -->
+    <div
+      class="modal fade"
+      id="tosModal"
+      tabindex="-1"
+      aria-labelledby="termsOfService"
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl"
+      >
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              <h4>Terms of Use</h4>
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body" id="contentTos"></div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- PP -->
+    <div
+      class="modal fade"
+      id="ppModal"
+      tabindex="-1"
+      aria-labelledby="PrivacyPolicy"
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl"
+      >
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              <h4>Privacy Policy</h4>
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body" id="contentPp"></div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Sidebar -->
+    <div
+      class="side-navbar active-nav d-flex justify-content-between flex-wrap flex-column bg-light"
+      id="sidebar-wrapper"
+    >
+      <div class="nav flex-column w-100 m-1">
+        <div
+          class="input-group rounded p-2 d-flex d-col justify-content-center"
+          id="configArea"
+        >
+          <div class="btn-group" role="group" aria-label="menu">
+            <button
+              class="btn btn-light dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              id="mapLayerBtn"
+            >
+              Mapstyle
+            </button>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="exampleRadiosMaps"
+                      id="map0"
+                      value="option000"
+                    />
+                    <label class="form-check-label" for="map0"> Dark </label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="exampleRadiosMaps"
+                      id="map1"
+                      value="option111"
+                    />
+                    <label class="form-check-label" for="map1"> Bright </label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="exampleRadiosMaps"
+                      id="map2"
+                      value="option222"
+                    />
+                    <label class="form-check-label" for="map2"> Smooth </label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="exampleRadiosMaps"
+                      id="map3"
+                      value="option333"
+                    />
+                    <label class="form-check-label" for="map3">
+                      Transport
+                    </label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="exampleRadiosMaps"
+                      id="map4"
+                      value="option444"
+                      checked
+                    />
+                    <label class="form-check-label" for="map4">
+                      Standard
+                    </label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="exampleRadiosMaps"
+                      id="map5"
+                      value="option555"
+                    />
+                    <label class="form-check-label" for="map5">
+                      Satellite
+                    </label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="exampleRadiosMaps"
+                      id="map6"
+                      value="option666"
+                    />
+                    <label class="form-check-label" for="map6"> Terrain </label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="exampleRadiosMaps"
+                      id="map7"
+                      value="option777"
+                    />
+                    <label class="form-check-label" for="map7"> Toner </label>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="btn-group-vehicle">
+            <button
+              class="btn btn-light dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              id="transportBtn"
+            >
+              Transport
+            </button>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="exampleRadiosTwo"
+                      value="option1"
+                      onclick="setMode(this.id)"
+                      id="driving"
+                      checked
+                    />
+                    <label class="form-check-label" for="driving">
+                      Driving
+                    </label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="exampleRadiosTwo"
+                      value="option2"
+                      onclick="setMode(this.id)"
+                      id="bike"
+                    />
+                    <label class="form-check-label" for="bike"> Bike </label>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="exampleRadiosTwo"
+                      onclick="setMode(this.id)"
+                      id="foot"
+                      for="foot"
+                      value="option3"
+                    />
+                    <label class="form-check-label"> Foot </label>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="btn-group-map d-flex">
+            <button
+              class="btn btn-light dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              id="settingsBtn"
+            >
+              Settings
+            </button>
+            <ul class="dropdown-menu" id="mapItems">
+              <li>
+                <a id="3dBtn">
+                  <div class="form-check form-switch">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      role="switch"
+                      id="flexSwitchCheckDefault1"
+                      onclick="setThreeD()"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="flexSwitchCheckDefault1"
+                      >3D Buildings</label
+                    >
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a id="hdBtn">
+                  <div class="form-check form-switch">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      role="switch"
+                      id="flexSwitchCheckDefault2"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="flexSwitchCheckDefault2"
+                      onclick="changeRes()"
+                      >Retina View</label
+                    >
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a id="fontBtn">
+                  <div class="form-check form-switch">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      role="switch"
+                      id="flexSwitchCheckDefault3"
+                      onclick="changeFontSize()"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="flexSwitchCheckDefault3"
+                      >Large Fonts</label
+                    >
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a id="rainBtn">
+                  <div class="form-check form-switch">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      role="switch"
+                      id="flexSwitchCheckDefault4"
+                      onclick="showRain()"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="flexSwitchCheckDefault4"
+                      >Rain Radar</label
+                    >
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a>
+                  <div class="form-check form-switch" id="userlocBtn">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      role="switch"
+                      id="flexSwitchCheckDefault5"
+                      onclick="setCurrentUserLoc()"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="flexSwitchCheckDefault5"
+                      >Locate Me</label
+                    >
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a>
+                  <div class="form-check form-switch" id="fullscreenBtn">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      role="switch"
+                      id="flexSwitchCheckDefault6"
+                      onclick="showFullscreen()"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="flexSwitchCheckDefault6"
+                      >Fullscreen</label
+                    >
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a>
+                  <div class="form-check form-switch" id="imperialBtn">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      role="switch"
+                      id="flexSwitchCheckDefault7"
+                      onclick="setUnitSystem()"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="flexSwitchCheckDefault7"
+                      >Imperial Units</label
+                    >
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a>
+                  <div class="form-check form-switch" id="roundBtn">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      role="switch"
+                      id="flexSwitchCheckDefault8"
+                      onclick="setRoundtrip()"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="flexSwitchCheckDefault8"
+                      >Roundtrip</label
+                    >
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="input-group rounded p-2" id="actionArea">
+          <div
+            class="btn-group btn-group-lg"
+            role="group"
+            aria-label="menu"
+            id="actionBtns"
+          >
+            <button
+              class="btn btn-light d-flex d-row"
+              type="button"
+              id="lockBtn"
+              onclick="actDeactMarking()"
+            >
+              <div class="sidebarActionText">
+                <i class="bi bi-geo-alt-fill"></i>
+                <small>Add</small>
+              </div>
+              <h6>
+                <span class="badge text-bg-primary" id="badgeMarkerCount">
+                  0
+                </span>
+              </h6>
+            </button>
+            <button
+              type="button"
+              class="btn btn-light"
+              data-bs-toggle="modal"
+              data-bs-target="#upload"
+              id="importCaptcha"
+            >
+              <div class="sidebarActionText">
+                <i class="bi bi-cloud-upload-fill"></i>
+                <small>Import</small>
+              </div>
+            </button>
+            <button
+              type="button"
+              class="btn btn-light"
+              id="eraserBtn"
+              onclick="deleteAllMarkers()"
+            >
+              <div class="sidebarActionText">
+                <i class="bi bi-trash-fill"></i>
+                <small>Clear</small>
+              </div>
+            </button>
+            <button
+              type="button"
+              class="btn btn-light"
+              id="routeBtn"
+              data-bs-toggle="modal"
+              data-bs-target="#captchaFrame"
+            >
+              <div class="sidebarActionText">
+                <i class="bi bi-bounding-box"></i>
+                <small>Route</small>
+              </div>
+            </button>
+          </div>
+        </div>
+        <hr class="hr" />
+        <div class="input-group rounded p-2" id="filterArea">
+          <input
+            type="search"
+            class="form-control"
+            id="filterInput"
+            placeholder="Filter"
+            onkeyup="filterListitems()"
+          />
+          <button
+            type="button"
+            class="btn btn btn-light"
+            id="sortFilterBtn"
+            onclick="sortListIitems()"
+          >
+            <i class="bi bi-sort-alpha-down"></i>
+          </button>
+          <button
+            type="button"
+            class="btn btn btn-light"
+            id="deleteFilterBtn"
+            onclick="deleteFilterInput()"
+          >
+            <i class="bi bi-backspace-fill"></i>
+          </button>
+        </div>
+        <hr class="hr" />
+        <section class="listgroup" id="listgroup">
+          <div class="list-group p-2" id="listitems"></div>
+        </section>
+      </div>
+      <div id="container">
+        <div class="backgroundImage" id="backgroundLogoImage">
+          <img
+            src="./resources/svg/sidebar_graphics.svg"
+            alt="logo background ShortestRoute"
+            height="80"
+            width="80"
+          />
+        </div>
+        <footer class="d-flex d-col text-center text-lg-start">
+          <!-- Copyright -->
+          <div class="justify-content-end text-center p-3 small">
+            <hr class="hr" />
+            <a><b>© ShortestRoute 2023</b></a
+            ><br />
+            <a
+              id="ppAnchor"
+              data-bs-toggle="modal"
+              data-bs-target="#tosModal"
+              onclick="pasteTerms()"
+              >Terms</a
+            >
+            |
+            <a
+              id="tosAnchor"
+              data-bs-toggle="modal"
+              data-bs-target="#ppModal"
+              onclick="pastePriv()"
+              >Privacy</a
+            >
+            |
+            <a type="button" data-cc="c-settings">Cookies</a>
+            |
+            <a
+              type="button"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+              >Help</a
+            >
+          </div>
+        </footer>
+      </div>
+    </div>
+    <!-- Onboarding -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              Frequently Asked Questions 🍌
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p class="d-block w-60 carou-padding">
+              <b> How do I add location markers?</b> <br />
+              Via address search and then clicking on the right-hand marker
+              symbol. Or via clicking on "Add" (marker symbol) before clicking
+              on a location on the map. Or via uploading a CSV file containing
+              all address data which will be added one-per-one. To start this
+              process, click on the "Import" button.<br /><br />
+              <b> How do I calculate a route? </b> <br />
+              You first need to add all location markers, then click on the
+              "Route" button (quadrangle symbol). The optimized route, waypoints
+              and directions will be displayed.<br /><br />
+              <b> What is the "Back" button for? </b><br />
+              For making changes in your route planning you have the option go
+              back one-step (i.e. to add or delete location markers).<br /><br />
+              <b> How can I download my data? </b> <br />
+              You can either download the route plan as a PDF incl. a map
+              screenshot via clicking on "Print" or export the route trace as a
+              GPX and CSV file by clicking on "Export".<br /><br />
+              <b> How can I navigate on my route? </b><br />
+              You can drive the calculated route by clicking the "Navigate"
+              button (road sign symbol) which will start Google Maps. If you
+              want to walk or cycle, you can also use the "Locate Me" map
+              pointer by opening "Settings".
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Bootstrap -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+      crossorigin="anonymous"
+    ></script>
+    <!-- CookieConsent-->
+    <script defer src="./scripts/ext.cookieconsent.js"></script>
+    <script defer src="./scripts/ext.cookieconsent-init.js"></script>
+    <!-- Custom JS -->
+    <script>
+var _0x809298=_0x4b15;(function(_0x100d77,_0xf23365){var _0x56a243=_0x4b15,_0x559adc=_0x100d77();while(!![]){try{var _0x2f9d93=-parseInt(_0x56a243(0x17e))/0x1*(parseInt(_0x56a243(0x1b4))/0x2)+-parseInt(_0x56a243(0xf3))/0x3*(-parseInt(_0x56a243(0xdd))/0x4)+parseInt(_0x56a243(0x1ea))/0x5+-parseInt(_0x56a243(0x1d3))/0x6*(-parseInt(_0x56a243(0x1ed))/0x7)+parseInt(_0x56a243(0x103))/0x8*(parseInt(_0x56a243(0x1f1))/0x9)+-parseInt(_0x56a243(0x1cf))/0xa*(-parseInt(_0x56a243(0x10f))/0xb)+-parseInt(_0x56a243(0x17d))/0xc*(parseInt(_0x56a243(0xcb))/0xd);if(_0x2f9d93===_0xf23365)break;else _0x559adc['push'](_0x559adc['shift']());}catch(_0xa5c8b0){_0x559adc['push'](_0x559adc['shift']());}}}(_0x5e7f,0xc349b));let searchDropdown=[],coordTouples=[],currentMarkers=[],markerCount=0x0,waypoints=[],waypointMarker=[],elevationProfile=[],elevationMap=[],userLoc=[],csvData=[],myGeoJSON={},myGpx=null,myCsvWp=[],summary=[],coordSwitch=0x0,MapModeCount=0x3,geolocSwitch=![],fontSizeSwitch=0x0,resSwitch=0x0,threeDSwitch=0x0,rainmapSwitch=0x0,transportMode=[_0x809298(0xc6)],roundtripMode=!![],imperialUnits=![],transportLink='mapbox/driving';const mapboxKey=_0x809298(0xce);var map=L[_0x809298(0x18a)](_0x809298(0x18a),{'renderer':L[_0x809298(0x111)](),'loadingControl':!![]})[_0x809298(0x199)]([0x14,-0x2d],0x3),assetLayerGroup=new L[(_0x809298(0x1ab))](),baseLayer=new L[(_0x809298(0x186))](_0x809298(0x1f2)+getDayNightMap(),{'maxZoom':0x13,'attribution':_0x809298(0x206)});assetLayerGroup[_0x809298(0x118)](baseLayer),assetLayerGroup['addTo'](map);const MapModi=[_0x809298(0x1d2),'https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png',_0x809298(0x172),_0x809298(0x134),_0x809298(0x13c),_0x809298(0x1e4),'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.png',_0x809298(0xf4)],attrib=[{'maxZoom':0x14,'attribution':_0x809298(0x206)},{'maxZoom':0x14,'attribution':_0x809298(0x206)},{'maxZoom':0x14,'attribution':_0x809298(0x206)},{'maxZoom':0x11,'attribution':_0x809298(0x178)},{'maxZoom':0x13,'attribution':_0x809298(0xfe)},{'attribution':_0x809298(0xde)},{'attribution':_0x809298(0x167),'subdomains':_0x809298(0x122),'minZoom':0x0,'maxZoom':0x14},{'attribution':'Map\x20tiles\x20by\x20<a\x20href=\x22http://stamen.com\x22>Stamen\x20Design</a>,\x20<a\x20href=\x22http://creativecommons.org/licenses/by/3.0\x22>CC\x20BY\x203.0</a>\x20&mdash;\x20Map\x20data\x20&copy;\x20<a\x20href=\x22https://www.openstreetmap.org/copyright\x22>OpenStreetMap</a>\x20','subdomains':'abcd','minZoom':0x0,'maxZoom':0x14}];document[_0x809298(0x1b9)](_0x809298(0xd4))[_0x809298(0x16c)](_0x809298(0x205),changeMapLayer),document[_0x809298(0x1b9)]('map1')['addEventListener'](_0x809298(0x205),changeMapLayer),document['getElementById'](_0x809298(0xe3))[_0x809298(0x16c)](_0x809298(0x205),changeMapLayer),document[_0x809298(0x1b9)](_0x809298(0x187))[_0x809298(0x16c)](_0x809298(0x205),changeMapLayer),document[_0x809298(0x1b9)](_0x809298(0x20c))[_0x809298(0x16c)]('click',changeMapLayer),document[_0x809298(0x1b9)]('map5')[_0x809298(0x16c)](_0x809298(0x205),changeMapLayer),document[_0x809298(0x1b9)](_0x809298(0x130))[_0x809298(0x16c)](_0x809298(0x205),changeMapLayer),document['getElementById']('map7')[_0x809298(0x16c)](_0x809298(0x205),changeMapLayer);function changeMapLayer(){var _0x1f4a1a=_0x809298;assetLayerGroup[_0x1f4a1a(0x142)]();let _0x584813=this['id'][_0x1f4a1a(0x124)](/^\D+/g,''),_0xac3785=L['tileLayer'](MapModi[_0x584813],attrib[_0x584813]);assetLayerGroup['addLayer'](_0xac3785);}let markerCounter=[],options={'icon':'font-awesome','iconShape':_0x809298(0xf7),'isAlphaNumericIcon':!![],'text':markerCounter,'iconSize':[0x1e,0x1e],'iconAnchor':[0xf,0xd],'borderColor':_0x809298(0x171),'backgroundColor':_0x809298(0x160),'textColor':'white','spin':!![]},options1={'icon':_0x809298(0x168),'iconShape':'marker','isAlphaNumericIcon':!![],'text':'Go','iconSize':[0x1e,0x1e],'iconAnchor':[0xf,0xd],'borderColor':'white','backgroundColor':_0x809298(0x160),'textColor':_0x809298(0x171),'spin':!![]},options2={'icon':_0x809298(0x168),'iconShape':_0x809298(0x104),'borderColor':_0x809298(0x159),'backgroundColor':'rgba(255,\x20255,\x20255,\x200)','textColor':_0x809298(0x159),'spin':!![]},options3={'icon':_0x809298(0x138),'iconShape':_0x809298(0x104),'borderColor':_0x809298(0x1c6),'backgroundColor':_0x809298(0x1c6),'textColor':_0x809298(0x159)};var control=L[_0x809298(0x18d)][_0x809298(0x15b)]({'draggableWaypoints':![],'lineOptions':{'styles':[{'color':_0x809298(0x17b),'opacity':0x1,'weight':0x5}],'addWaypoints':!![]},'routeWhileDragging':![],'router':L[_0x809298(0x18d)][_0x809298(0x1d4)](mapboxKey,options)})[_0x809298(0xd9)](map),lc=L['control'][_0x809298(0x1d8)]()[_0x809298(0xd9)](map);function _0x4b15(_0x56f04b,_0x3c6d2b){var _0x5e7f4=_0x5e7f();return _0x4b15=function(_0x4b1524,_0x3b1a52){_0x4b1524=_0x4b1524-0xbd;var _0x2fdb34=_0x5e7f4[_0x4b1524];return _0x2fdb34;},_0x4b15(_0x56f04b,_0x3c6d2b);}map['addControl'](L[_0x809298(0x15b)]['locate']({'locateOptions':{'enableHighAccuracy':!![]}}));var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',osm2=new L[(_0x809298(0x1e7))](osmUrl,{'minZoom':0x0,'maxZoom':0xd}),miniMap=new L[(_0x809298(0x1a6))][(_0x809298(0xcc))](osm2,{'toggleDisplay':!![]})[_0x809298(0xd9)](map);let detailControl=new L[(_0x809298(0x1a6))][(_0x809298(0x16f))](0x0,0x4);detailControl['addTo'](map),L['control'][_0x809298(0x1ff)]({'position':'bottomleft','nextButtonText':'>','playStopButtonText':'Play/Stop','prevButtonText':'<','positionSliderLabelText':_0x809298(0x15a),'opacitySliderLabelText':_0x809298(0x20a),'animationInterval':0x1f4,'opacity':0.5})[_0x809298(0xd9)](map);function getDayNightMap(){var _0x50dba6=_0x809298;if(window[_0x50dba6(0x214)])return window[_0x50dba6(0x214)](_0x50dba6(0x174))['matches']?(document[_0x50dba6(0x1b9)](_0x50dba6(0xd4))[_0x50dba6(0x109)]=!![],_0x50dba6(0xf1)):_0x50dba6(0x1d1);}L[_0x809298(0x132)]()[_0x809298(0xd9)](map);let pluginOptions={'cropImageByInnerWH':!![],'hidden':![],'preventDownload':![],'domtoimageOptions':{},'position':_0x809298(0x10c),'screenName':_0x809298(0xe0),'hideElementsWithSelectors':[_0x809298(0x13e)],'mimeType':'image/png','caption':null,'captionFontSize':0xf,'captionFont':_0x809298(0x213),'captionColor':'black','captionBgColor':_0x809298(0x171),'captionOffset':0x5,'onPixelDataFail':async function({node:_0x15d9e8,plugin:_0x27b2e6,error:_0x11152f,mapPane:_0x1fb247,domtoimageOptions:_0x564b74}){return _0x27b2e6['_getPixelDataOfNormalMap'](_0x564b74);}};this[_0x809298(0x132)]=L['simpleMapScreenshoter'](pluginOptions)[_0x809298(0xd9)](this[_0x809298(0x18a)]);function actDeactMarking(){var _0x4c6104=_0x809298;if(coordSwitch===0x0)coordSwitch=0x1,document[_0x4c6104(0x1b9)]('lockBtn')[_0x4c6104(0x10d)][_0x4c6104(0xcf)]('btn-dark'),document[_0x4c6104(0x1b9)](_0x4c6104(0x17f))['classList'][_0x4c6104(0x15c)](_0x4c6104(0x153));else{if(coordSwitch===0x1)coordSwitch=0x0;else(coordSwitch!=0x1||coordSwitch!=0x0)&&(coordSwitch=0x0);}}function getGeoData(_0x232338){var _0x580097=_0x809298;_0x232338[_0x580097(0x1f8)]();const _0x35fafa=fetch(_0x580097(0x1f2)+'nominatim.openstreetmap.org/search.php?q='+document['getElementById'](_0x580097(0x215))[_0x580097(0xec)]+_0x580097(0x198));_0x35fafa[_0x580097(0xee)](_0x3b5892=>_0x3b5892['json']())['then'](_0x274387=>{var _0x365491=_0x580097;searchDropdown=[],coordTouples=[];for(i=0x0;i<_0x274387['length'];i++){searchDropdown['push'](_0x274387[i]['display_name']),coordTouples['push']([_0x274387[i]['lat'],_0x274387[i]['lon']]);}document[_0x365491(0x1b9)](_0x365491(0x1d5))[_0x365491(0xbd)]='';for(i=0x0;i<searchDropdown[_0x365491(0x141)];i++){document[_0x365491(0x1b9)]('card')['innerHTML']+=_0x365491(0x150)+_0x274387[i][_0x365491(0x1e0)]+',\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20'+_0x274387[i][_0x365491(0xf9)]+');\x20clearSearchBar()\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20style=\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20cursor:\x20pointer;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22mb-1\x22>'+searchDropdown[i]+_0x365491(0x156)+[i]+_0x365491(0x1f9);}})['catch'](_0x4012fc=>{var _0x52d2b7=_0x580097;console[_0x52d2b7(0x1e9)](_0x52d2b7(0xdb),_0x4012fc);});}function reverseGeocode(_0x439ee2,_0x228424){return new Promise(function(_0x503013,_0x321ff2){var _0x44f3b6=_0x4b15;axios[_0x44f3b6(0xbe)](_0x44f3b6(0x1f2)+'nominatim.openstreetmap.org/reverse.php?lat='+_0x439ee2+'&lon='+_0x228424+_0x44f3b6(0x146))['then'](_0x3022ba=>{var _0x2ed5e4=_0x44f3b6,_0x630d6a=_0x3022ba[_0x2ed5e4(0x203)];typeof _0x630d6a['address']===_0x2ed5e4(0x1c4)||typeof _0x630d6a[_0x2ed5e4(0x11b)][_0x2ed5e4(0x14f)]===_0x2ed5e4(0x1c4)?(alert(_0x2ed5e4(0x164)),currentMarkers[currentMarkers['length']-0x1][_0x2ed5e4(0x15c)](),currentMarkers['splice']([currentMarkers['length']-0x1],0x1),coordSwitch=0x0):_0x503013(_0x630d6a[_0x2ed5e4(0xf8)]);},_0x9c306d=>{_0x321ff2(_0x9c306d);});});}async function createCoordinate(_0x189809){var _0x10cf2d=_0x809298;const _0xf2a1af=[coordTouples[_0x189809][0x0],coordTouples[_0x189809][0x1]];var _0x1f800b=new L[(_0x10cf2d(0xf7))](_0xf2a1af,{'icon':L[_0x10cf2d(0x201)][_0x10cf2d(0x127)](options)})[_0x10cf2d(0xd9)](map);currentMarkers[_0x10cf2d(0x13b)](_0x1f800b),document['getElementById']('deleteBtn')[_0x10cf2d(0x205)]();var _0x22fe09=await reverseGeocode(currentMarkers[currentMarkers[_0x10cf2d(0x141)]-0x1][_0x10cf2d(0x1c8)][_0x10cf2d(0x1e0)],currentMarkers[currentMarkers[_0x10cf2d(0x141)]-0x1][_0x10cf2d(0x1c8)][_0x10cf2d(0x1a4)]),_0x4942b1=getDistance(userLoc,[currentMarkers[currentMarkers[_0x10cf2d(0x141)]-0x1][_0x10cf2d(0x1c8)][_0x10cf2d(0x1e0)],currentMarkers[currentMarkers['length']-0x1][_0x10cf2d(0x1c8)][_0x10cf2d(0x1a4)]]),_0x4ee1ab;userLoc[_0x10cf2d(0x141)]===0x0?_0x4ee1ab='':_0x4ee1ab='▸\x20'+_0x4942b1+_0x10cf2d(0x12d),document[_0x10cf2d(0x1b9)](_0x10cf2d(0x1a9))[_0x10cf2d(0xbd)]+=_0x10cf2d(0xdc)+(currentMarkers['length']-0x1)+_0x10cf2d(0x1e5)+currentMarkers[currentMarkers['length']-0x1][_0x10cf2d(0x1f7)]+_0x10cf2d(0xed)+_0x22fe09+'</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<small\x20class=\x22mb-1\x20px-1\x22>'+_0x4ee1ab+'</small>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</section>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22d-flex\x20flex-column\x20justify-content-between\x22\x20style=\x22flex:\x201\x201\x202;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<i\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20class=\x22bi\x20bi-x-square-fill\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20onclick=\x22removeListLoc(parentNode.parentNode.id)\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</a>',markerCount++,document[_0x10cf2d(0x1b9)]('badgeMarkerCount')['innerHTML']=''+markerCount,document[_0x10cf2d(0x1b9)](_0x10cf2d(0x105))[_0x10cf2d(0x169)]['display']='none',clearSearchBar();}map['on'](_0x809298(0x205),async _0x949bb5=>{var _0x39e68d=_0x809298;if(coordSwitch===0x1){var _0x5c0a2c=new L['marker'](_0x949bb5[_0x39e68d(0x10a)],{'icon':L[_0x39e68d(0x201)]['icon'](options)})[_0x39e68d(0xd9)](map);currentMarkers['push'](_0x5c0a2c);var _0x53f00a=await reverseGeocode(currentMarkers[currentMarkers['length']-0x1][_0x39e68d(0x1c8)][_0x39e68d(0x1e0)],currentMarkers[currentMarkers[_0x39e68d(0x141)]-0x1][_0x39e68d(0x1c8)][_0x39e68d(0x1a4)]),_0x4dea8b=getDistance(userLoc,[currentMarkers[currentMarkers['length']-0x1]['_latlng'][_0x39e68d(0x1e0)],currentMarkers[currentMarkers[_0x39e68d(0x141)]-0x1][_0x39e68d(0x1c8)][_0x39e68d(0x1a4)]]),_0x11bb0f;userLoc['length']===0x0?_0x11bb0f='':_0x11bb0f='▸\x20'+_0x4dea8b+_0x39e68d(0x12d),document[_0x39e68d(0x1b9)](_0x39e68d(0x1a9))[_0x39e68d(0xbd)]+='\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20class=\x22list-group-item\x20list-group-item-action\x20d-flex\x20flex-row\x20justify-content-between\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20id=\x22listitem'+(currentMarkers[_0x39e68d(0x141)]-0x1)+'\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<section\x20class=\x22d-flex\x20flex-column\x22\x20style=\x22flex:\x2011\x201\x200;\x22\x20id=\x22'+currentMarkers[currentMarkers[_0x39e68d(0x141)]-0x1][_0x39e68d(0x1f7)]+_0x39e68d(0x1c2)+_0x53f00a+'</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<small\x20class=\x22mb-1\x20px-1\x22>'+_0x11bb0f+'</small>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</section>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22d-flex\x20flex-column\x20justify-content-between\x22\x20style=\x22flex:\x201\x201\x202;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<i\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20class=\x22bi\x20bi-x-square-fill\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20onclick=\x22removeListLoc(parentNode.parentNode.id)\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</a>',coordSwitch=0x0,markerCount++,document['getElementById']('badgeMarkerCount')[_0x39e68d(0xbd)]=''+markerCount,document['getElementById'](_0x39e68d(0x105))['style'][_0x39e68d(0x20d)]=_0x39e68d(0xc5),document[_0x39e68d(0x1b9)]('lockBtn')['classList'][_0x39e68d(0xcf)](_0x39e68d(0x153)),document[_0x39e68d(0x1b9)](_0x39e68d(0x17f))[_0x39e68d(0x10d)][_0x39e68d(0x15c)](_0x39e68d(0x14e));}else{if(coordSwitch===0x0)document['getElementById']('card')[_0x39e68d(0xbd)]='';else return![];}});function removeListLoc(_0x204830){var _0x536429=_0x809298,_0x5c76b0=_0x204830['replace'](/[^\d-]/g,'');document[_0x536429(0x1b9)](_0x204830)[_0x536429(0x15c)](),currentMarkers[_0x5c76b0][_0x536429(0x15c)](),currentMarkers[_0x536429(0x1ce)](_0x5c76b0,0x1);for(var _0x5103f3=document[_0x536429(0x1b9)](_0x536429(0x1a9))[_0x536429(0x1e3)]['length']-0x1;_0x5103f3>=_0x5c76b0;_0x5103f3--){document['getElementById']('listitems')[_0x536429(0x1e3)][_0x5103f3][_0x536429(0x188)]('id',_0x5103f3);}markerCount--,document['getElementById'](_0x536429(0x211))[_0x536429(0xbd)]=''+markerCount,currentMarkers[_0x536429(0x141)]===0x0?document[_0x536429(0x1b9)](_0x536429(0x105))['style'][_0x536429(0x20d)]='flex':document['getElementById'](_0x536429(0x105))[_0x536429(0x169)]['display']='none';}function deleteAllMarkers(){var _0x1d0a4a=_0x809298;if(window[_0x1d0a4a(0x1be)]('Do\x20you\x20really\x20want\x20to\x20delete\x20all\x20markers?')){if(currentMarkers[_0x1d0a4a(0x141)]===0x0)alert('No\x20markers\x20placed\x20on\x20the\x20map!');else{if(currentMarkers[_0x1d0a4a(0x141)]!=0x0&&waypoints[_0x1d0a4a(0x141)]===0x0){for(i=currentMarkers['length']-0x1;i>=0x0;i--){currentMarkers[i]['remove']();}currentMarkers[_0x1d0a4a(0x1ce)](0x0,currentMarkers[_0x1d0a4a(0x141)]),document[_0x1d0a4a(0x1b9)](_0x1d0a4a(0x1a9))['innerHTML']='';}else{if(currentMarkers[_0x1d0a4a(0x141)]!=0x0&&waypoints[_0x1d0a4a(0x141)]!=0x0){for(i=currentMarkers[_0x1d0a4a(0x141)]-0x1;i>=0x0;i--){currentMarkers[i]['remove'](),waypointMarker[i][_0x1d0a4a(0x15c)]();}currentMarkers[_0x1d0a4a(0x1ce)](0x0,currentMarkers[_0x1d0a4a(0x141)]),document[_0x1d0a4a(0x1b9)]('listitems')[_0x1d0a4a(0xbd)]='',waypointMarker=[],waypoints=[];}else currentMarkers[i]===''&&(currentMarkers[_0x1d0a4a(0x1ce)](0x0,currentMarkers[_0x1d0a4a(0x141)]),document[_0x1d0a4a(0x1b9)](_0x1d0a4a(0x1a9))[_0x1d0a4a(0xbd)]='');}}markerCount=0x0,document['getElementById'](_0x1d0a4a(0x211))[_0x1d0a4a(0xbd)]=''+markerCount,currentMarkers[_0x1d0a4a(0x141)]===0x0?document['getElementById']('container')['style'][_0x1d0a4a(0x20d)]='flex':document['getElementById'](_0x1d0a4a(0x105))[_0x1d0a4a(0x169)][_0x1d0a4a(0x20d)]='none';}}function adjustActionArea(){var _0x178ca4=_0x809298;document[_0x178ca4(0x1b9)](_0x178ca4(0x1ae))[_0x178ca4(0xbd)]='',document[_0x178ca4(0x1b9)]('actionArea')[_0x178ca4(0xbd)]+=_0x178ca4(0x1ca);}function callApi(){var _0x5e6a58=_0x809298;setTransportRouter();let _0x3d8f7f=[],_0x28f878=0x1;for(i=0x0;i<currentMarkers[_0x5e6a58(0x141)];i++){_0x3d8f7f['push'](currentMarkers[i]['_latlng']['lng']),_0x3d8f7f[_0x5e6a58(0x13b)](currentMarkers[i][_0x5e6a58(0x1c8)][_0x5e6a58(0x1e0)]);}let _0x364bdc=_0x3d8f7f[_0x5e6a58(0x1bb)](_0x17bb1c=>_0x17bb1c)[_0x5e6a58(0x137)](),_0xb89b97=_0x364bdc[_0x5e6a58(0x124)](/,/g,_0x297fc2=>++_0x28f878%0x2?';':_0x297fc2),_0x37814d;return roundtripMode===!![]?_0x37814d=_0x5e6a58(0x210):_0x37814d=_0x5e6a58(0x16e),new Promise(function(_0x2f455d,_0x52d6a5){var _0x59ea0e=_0x5e6a58;axios['get'](_0x59ea0e(0x1f2)+_0x59ea0e(0x131)+transportMode+'/'+_0xb89b97+_0x59ea0e(0x13f)+roundtripMode+_0x59ea0e(0x1cd)+_0x37814d+'')['then'](_0x178336=>{var _0x71f13a=_0x59ea0e,_0x47e590=_0x178336['data'];_0x2f455d(_0x47e590[_0x71f13a(0xd1)]),waypoints[_0x71f13a(0x13b)](_0x47e590['waypoints']),adjustActionArea();for(i=0x0;i<currentMarkers['length'];i++){markerCounter['push'](waypoints[0x0][i][_0x71f13a(0x1a8)]),coord=[currentMarkers[i]['_latlng'][_0x71f13a(0x1e0)],currentMarkers[i][_0x71f13a(0x1c8)][_0x71f13a(0x1a4)]],i===0x0?waypointMarker[_0x71f13a(0x13b)](new L[(_0x71f13a(0xf7))](coord,{'icon':L['BeautifyIcon'][_0x71f13a(0x127)](options1)})[_0x71f13a(0xd9)](map)):waypointMarker['push'](new L[(_0x71f13a(0xf7))](coord,{'icon':L[_0x71f13a(0x201)][_0x71f13a(0x127)](options)})[_0x71f13a(0xd9)](map)),markerCounter['shift']();}let _0x294c3c=waypoints[0x0][_0x71f13a(0x17c)](0x0);_0x294c3c[_0x71f13a(0x1c3)](function(_0x5eb030,_0x54ddc7){var _0x502808=_0x71f13a;return _0x5eb030[_0x502808(0x1a8)]-_0x54ddc7[_0x502808(0x1a8)];});let _0xc1de11=[];for(i=0x0;i<_0x294c3c[_0x71f13a(0x141)];i++){_0xc1de11[_0x71f13a(0x13b)](L[_0x71f13a(0xd6)](_0x294c3c[i][_0x71f13a(0x19a)][0x1],_0x294c3c[i]['location'][0x0]));}control=L[_0x71f13a(0x18d)]['control']({'waypoints':_0xc1de11,'draggableWaypoints':![],'routeWhileDragging':![],'router':L[_0x71f13a(0x18d)][_0x71f13a(0x1d4)](mapboxKey,options),'showAlternatives':![],'lineOptions':{'styles':[{'color':_0x71f13a(0x1dd),'opacity':0.8,'weight':0x7,'dashArray':'7,12'}],'addWaypoints':![]},'createMarker':function(_0x2604fa,_0xcc8ee2,_0x3fcb90){var _0x57fced=_0x71f13a;if(_0x2604fa===0x0)return;if(_0x2604fa===_0x3fcb90-0x1)return L[_0x57fced(0xf7)](_0xcc8ee2['latLng'],{'icon':L['BeautifyIcon']['icon'](options2)});}})['on'](_0x71f13a(0xc2),async function(_0x11fe99){var _0x25528e=_0x71f13a;myGeoJSON={'type':_0x25528e(0xe5),'coordinates':[]};var _0xec475d=[_0x11fe99['routes'][0x0][_0x25528e(0x1cb)]];for(i=0x0;i<_0xec475d[0x0][_0x25528e(0x141)];i++){myGeoJSON['coordinates'][_0x25528e(0x13b)]([_0xec475d[0x0][i][_0x25528e(0x1a4)],_0xec475d[0x0][i]['lat']]);}myGpx=togpx(myGeoJSON),summary[_0x25528e(0x13b)](returnDistanceFormat(_0x11fe99['routes'][0x0][_0x25528e(0x120)][_0x25528e(0x1af)])),summary['push'](Math[_0x25528e(0xbf)](_0x11fe99[_0x25528e(0x1bc)][0x0][_0x25528e(0x120)]['totalTime']/0x3c)),summary[_0x25528e(0x13b)](transportMode),document[_0x25528e(0x1b9)]('filterArea')[_0x25528e(0xbd)]='',document['getElementById'](_0x25528e(0x176))[_0x25528e(0xbd)]+=_0x25528e(0x14d)+returnDistanceFormat(_0x11fe99['routes'][0x0][_0x25528e(0x120)][_0x25528e(0x1af)])+_0x25528e(0x11e)+Math[_0x25528e(0xbf)](_0x11fe99[_0x25528e(0x1bc)][0x0][_0x25528e(0x120)][_0x25528e(0x158)]/0x3c)+_0x25528e(0x1da)+transportMode+_0x25528e(0x1b5),document[_0x25528e(0x1b9)]('listitems')[_0x25528e(0xbd)]='',document[_0x25528e(0x1b9)](_0x25528e(0x1a9))[_0x25528e(0xbd)]='\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22accordion\x22\x20id=\x22accordionPanelsStayOpenExample\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22accordion-item\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h2\x20class=\x22accordion-header\x22\x20id=\x22panelsStayOpen-headingOne\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22accordion-button\x22\x20type=\x22button\x22\x20data-bs-toggle=\x22collapse\x22\x20data-bs-target=\x22#panelsStayOpen-collapseOne\x22\x20aria-expanded=\x22true\x22\x20aria-controls=\x22panelsStayOpen-collapseOne\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<b>Waypoints</b>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</h2>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20id=\x22panelsStayOpen-collapseOne\x22\x20class=\x22accordion-collapse\x20collapse\x20show\x22\x20aria-labelledby=\x22panelsStayOpen-headingOne\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22accordion-body\x20p-1\x22\x20id=\x22accordionBodOne\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20',waypoints[0x0]=waypoints[0x0][_0x25528e(0x1c3)]((_0x6c22c6,_0x29a474)=>_0x6c22c6[_0x25528e(0x1a8)]-_0x29a474[_0x25528e(0x1a8)]);for(i=0x0;i<waypoints[0x0][_0x25528e(0x141)];i++){var _0x42c6de=await reverseGeocode(waypoints[0x0][i][_0x25528e(0x19a)][0x1],waypoints[0x0][i][_0x25528e(0x19a)][0x0]);myCsvWp[_0x25528e(0x13b)]([_0x42c6de]),document['getElementById'](_0x25528e(0x11f))[_0x25528e(0xbd)]+='\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20class=\x22list-group-item\x20list-group-item-action\x20d-flex\x20flex-row\x20justify-content-between\x20p-2\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20style=\x22flex:\x202;\x20border:\x20none\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22d-flex\x20ms-2\x22>'+_0x42c6de+_0x25528e(0x194)+waypoints[0x0][i][_0x25528e(0x19a)][0x1]+',\x20'+waypoints[0x0][i][_0x25528e(0x19a)][0x0]+_0x25528e(0x192);}elevationProfile=[],elevationMap=[];for(i=0x0;i<_0x11fe99['routes'][0x0][_0x25528e(0x1cb)][_0x25528e(0x141)];i+=Math['round'](_0x11fe99['routes'][0x0][_0x25528e(0x1cb)][_0x25528e(0x141)]/0x64)){elevationProfile['length']<0x64&&(elevationProfile[_0x25528e(0x13b)]('latitude='+_0x11fe99['routes'][0x0][_0x25528e(0x1cb)][i][_0x25528e(0x1e0)]),elevationProfile[_0x25528e(0x13b)](_0x25528e(0x1a3)+_0x11fe99[_0x25528e(0x1bc)][0x0][_0x25528e(0x1cb)][i][_0x25528e(0x1a4)]));}await callElevData(),drawChart(),document[_0x25528e(0x1b9)](_0x25528e(0x1a9))[_0x25528e(0xbd)]+='\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<hr\x20class=\x22hr\x22\x20/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22accordion\x22\x20id=\x22accordionPanelsStayOpenExample\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22accordion-item\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h2\x20class=\x22accordion-header\x22\x20id=\x22panelsStayOpen-headingTwo\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20class=\x22accordion-button\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20type=\x22button\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20data-bs-toggle=\x22collapse\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20data-bs-target=\x22#panelsStayOpen-collapseTwo\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20aria-expanded=\x22false\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20aria-controls=\x22panelsStayOpen-collapseTwo\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<b>Directions</b>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</h2>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20id=\x22panelsStayOpen-collapseTwo\x22\x20class=\x22accordion-collapse\x22\x20aria-labelledby=\x22panelsStayOpen-headingTwo\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22accordion-body\x20p-1\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>';for(i=0x0;i<_0x11fe99[_0x25528e(0x1bc)][0x0][_0x25528e(0x1f3)][_0x25528e(0x141)];i++){document[_0x25528e(0x1b9)](_0x25528e(0xf6))[_0x25528e(0xbd)]+=_0x25528e(0x1f6)+_0x11fe99[_0x25528e(0x1bc)][0x0][_0x25528e(0x1cb)][_0x11fe99[_0x25528e(0x1bc)][0x0]['instructions'][i][_0x25528e(0x1bd)]][_0x25528e(0x1e0)]+',\x20'+_0x11fe99['routes'][0x0][_0x25528e(0x1cb)][_0x11fe99[_0x25528e(0x1bc)][0x0][_0x25528e(0x1f3)][i][_0x25528e(0x1bd)]][_0x25528e(0x1a4)]+_0x25528e(0x140)+[i+0x1]+_0x25528e(0x1d9)+_0x11fe99[_0x25528e(0x1bc)][0x0][_0x25528e(0x1f3)][i][_0x25528e(0x1bf)]+_0x25528e(0xf5)+returnDistanceFormat(_0x11fe99[_0x25528e(0x1bc)][0x0][_0x25528e(0x1f3)][i][_0x25528e(0x10e)])+_0x25528e(0x1b6);}})[_0x71f13a(0xd9)](map);},_0x1eb30b=>{_0x52d6a5(_0x1eb30b);});});}const signupCaptcha=document[_0x809298(0x1b9)]('captchaStuff');signupCaptcha[_0x809298(0x16c)](_0x809298(0x202),_0x1c4046=>{var _0x28d9a7=_0x809298;console[_0x28d9a7(0x1b8)](_0x28d9a7(0x126),{'token':_0x1c4046[_0x28d9a7(0x17a)]}),getRoute(),document[_0x28d9a7(0x1b9)](_0x28d9a7(0x1b7))[_0x28d9a7(0x205)]();}),signupCaptcha['addEventListener'](_0x809298(0x1e9),_0x1d8009=>{var _0x43b0fe=_0x809298;console['log'](_0x43b0fe(0x19d),{'error':_0x1d8009[_0x43b0fe(0x1e9)]}),console[_0x43b0fe(0x1b8)](_0x43b0fe(0x123));});function getRoute(){var _0x36ac1c=_0x809298;currentMarkers[_0x36ac1c(0x141)]===0x0?alert(_0x36ac1c(0x177)):(document['getElementById'](_0x36ac1c(0x215))[_0x36ac1c(0x169)][_0x36ac1c(0x180)]=_0x36ac1c(0xd7),document['getElementById'](_0x36ac1c(0x215))[_0x36ac1c(0x100)]=!![],document[_0x36ac1c(0x1b9)](_0x36ac1c(0x121))['disabled']=!![],document[_0x36ac1c(0x1b9)](_0x36ac1c(0x1aa))[_0x36ac1c(0x100)]=!![],document[_0x36ac1c(0x1b9)]('smallPinBtn')['disabled']=!![],document[_0x36ac1c(0x1b9)](_0x36ac1c(0x1ef))['disabled']=!![],document[_0x36ac1c(0x1b9)](_0x36ac1c(0x15d))[_0x36ac1c(0x100)]=![],document[_0x36ac1c(0x1b9)]('smallNavBtn')[_0x36ac1c(0x100)]=![],callApi(),document['getElementById'](_0x36ac1c(0x165))[_0x36ac1c(0xbd)]='',document[_0x36ac1c(0x1b9)]('toastField')[_0x36ac1c(0xbd)]+=_0x36ac1c(0x13a),new bootstrap['Toast'](document['getElementById'](_0x36ac1c(0x147)))['show']());}async function goBack(){var _0x3536e3=_0x809298;document[_0x3536e3(0x1b9)](_0x3536e3(0x165))['innerHTML']='',document['getElementById'](_0x3536e3(0x165))[_0x3536e3(0xbd)]+=_0x3536e3(0x145),new bootstrap[(_0x3536e3(0x151))](document[_0x3536e3(0x1b9)](_0x3536e3(0x147)))[_0x3536e3(0x1ad)](),document[_0x3536e3(0x1b9)]('searchBar')['style'][_0x3536e3(0x180)]=null,document['getElementById'](_0x3536e3(0x215))[_0x3536e3(0x100)]=![],document['getElementById']('deleteBtn')[_0x3536e3(0x100)]=![],document[_0x3536e3(0x1b9)](_0x3536e3(0x1aa))[_0x3536e3(0x100)]=![],document[_0x3536e3(0x1b9)]('smallPinBtn')[_0x3536e3(0x100)]=![],document[_0x3536e3(0x1b9)](_0x3536e3(0x1ef))[_0x3536e3(0x100)]=![],document[_0x3536e3(0x1b9)](_0x3536e3(0x15d))[_0x3536e3(0x100)]=!![],document['getElementById'](_0x3536e3(0x135))['disabled']=!![],waypoints=[],myGeoJSON={},myGpx=null,myCsvWp=[],summary=[],document['getElementById']('actionArea')[_0x3536e3(0xbd)]='',document['getElementById'](_0x3536e3(0x1ae))['innerHTML']+=_0x3536e3(0x1c7)+markerCount+_0x3536e3(0x14b),document[_0x3536e3(0x1b9)](_0x3536e3(0x176))[_0x3536e3(0xbd)]='',document['getElementById'](_0x3536e3(0x176))[_0x3536e3(0xbd)]+=_0x3536e3(0xeb),document[_0x3536e3(0x1b9)](_0x3536e3(0x1a9))[_0x3536e3(0xbd)]='';for(i=0x0;i<currentMarkers[_0x3536e3(0x141)];i++){var _0x25fd35=await reverseGeocode(currentMarkers[i][_0x3536e3(0x1c8)][_0x3536e3(0x1e0)],currentMarkers[i][_0x3536e3(0x1c8)]['lng']),_0x55e9e0=getDistance(userLoc,[currentMarkers[i][_0x3536e3(0x1c8)][_0x3536e3(0x1e0)],currentMarkers[i][_0x3536e3(0x1c8)][_0x3536e3(0x1a4)]]),_0x44135c;userLoc[_0x3536e3(0x141)]===0x0?_0x44135c='':_0x44135c='▸\x20'+_0x55e9e0+_0x3536e3(0x12d),document[_0x3536e3(0x1b9)](_0x3536e3(0x1a9))['innerHTML']+=_0x3536e3(0xdc)+[i]+'\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<section\x20class=\x22d-flex\x20flex-column\x22\x20style=\x22flex:\x2011\x201\x200;\x22\x20id=\x22'+currentMarkers[i]['_leaflet_id']+_0x3536e3(0xed)+_0x25fd35+_0x3536e3(0x179)+_0x44135c+_0x3536e3(0x18e);}map['removeControl'](control),waypointMarker['forEach'](_0x217862=>_0x217862[_0x3536e3(0x15c)]());}function callElevData(){var _0x5e2791=elevationProfile['join']('&');return new Promise(function(_0x5ab1ab,_0x54d9ca){var _0x26840d=_0x4b15;axios[_0x26840d(0xbe)](_0x26840d(0x18b)+_0x5e2791)[_0x26840d(0xee)](_0x1596f1=>{var _0x15a462=_0x26840d,_0x114b13=_0x1596f1[_0x15a462(0x203)];_0x5ab1ab(_0x114b13[_0x15a462(0xc9)]),elevationMap['push'](_0x114b13['elevation']);},_0x5010d7=>{_0x54d9ca(_0x5010d7);});});}function drawChart(){var _0x1eb3ec=_0x809298;const _0x20b5a1=document[_0x1eb3ec(0x1b9)](_0x1eb3ec(0x1ec)),_0xcea5e8=[],_0x1fb148=elevationMap[0x0],_0xe9fce3=_0x1fb148[_0x1eb3ec(0x141)];for(let _0x16e396=0x0;_0x16e396<_0xe9fce3;++_0x16e396){_0xcea5e8[_0x1eb3ec(0x13b)](((_0x16e396+0x1)*0x2)[_0x1eb3ec(0x137)]());}const _0x21abe9={'labels':_0xcea5e8,'datasets':[{'label':_0x1eb3ec(0xe6),'data':_0x1fb148,'borderColor':window[_0x1eb3ec(0x214)](_0x1eb3ec(0x174))[_0x1eb3ec(0x1b1)]?_0x1eb3ec(0x18f):_0x1eb3ec(0x1dd),'fill':!![],'cubicInterpolationMode':_0x1eb3ec(0xdf),'tension':0.4,'pointRadius':0x1}]};new Chart(_0x20b5a1,{'type':_0x1eb3ec(0x1a2),'data':_0x21abe9,'layout':{'padding':{'top':0x14}},'options':{'responsive':!![],'plugins':{'legend':{'display':![]},'tooltip':{'enabled':![]}},'interaction':{'intersect':![]},'legend':{'display':![]},'scales':{'x':{'beginAtZero':!![],'display':!![],'title':{'display':!![],'text':_0x1eb3ec(0x11c)}},'y':{'beginAtZero':!![],'display':!![],'title':{'display':!![],'text':_0x1eb3ec(0x20b)},'suggestedMin':Math['min'](_0x1fb148),'suggestedMax':Math[_0x1eb3ec(0x1fa)](_0x1fb148)}}}});}function setTransportRouter(){var _0x10a64f=_0x809298;transportLink='';switch(transportMode[0x0]){case _0x10a64f(0xc6):transportLink=_0x10a64f(0x208);break;case _0x10a64f(0x139):transportLink=_0x10a64f(0x12a);break;case _0x10a64f(0xe7):transportLink=_0x10a64f(0x162);break;default:transportLink=_0x10a64f(0x208);break;}}function setCurrentUserLoc(){var _0x545d1c=_0x809298;document[_0x545d1c(0x1b9)]('flexSwitchCheckDefault5')[_0x545d1c(0x109)]===![]?lc[_0x545d1c(0x10b)]():lc[_0x545d1c(0x15e)]();}function getDistance(_0x377c4b,_0xdb19fa){var _0x323adf=_0x809298;function _0x2213fe(_0x2bfbd3){return _0x2bfbd3*Math['PI']/0xb4;}var _0x4f02a6=_0x2213fe(_0x377c4b[0x1]),_0xd445e7=_0x2213fe(_0x377c4b[0x0]),_0x49b355=_0x2213fe(_0xdb19fa[0x1]),_0x42cd0c=_0x2213fe(_0xdb19fa[0x0]),_0x56ebe1=_0x42cd0c-_0xd445e7,_0x265c4d=_0x49b355-_0x4f02a6,_0x3595fc=Math[_0x323adf(0x12e)](Math['sin'](_0x56ebe1/0x2),0x2)+Math[_0x323adf(0x117)](_0xd445e7)*Math[_0x323adf(0x117)](_0x42cd0c)*Math[_0x323adf(0x12e)](Math[_0x323adf(0x157)](_0x265c4d/0x2),0x2),_0x21b448=0x2*Math[_0x323adf(0x107)](Math[_0x323adf(0xfc)](_0x3595fc)),_0x302cef=0x18e3;return Math[_0x323adf(0xbf)](_0x21b448*_0x302cef);}function flyToMarker(_0x315a38,_0x4c157b){var _0x555389=_0x809298;map[_0x555389(0x1df)]([_0x315a38,_0x4c157b],0x10,{'pan':{'animate':![],'duration':1.5},'zoom':{'animate':![]}});}function changeFontSize(){var _0x6daf9=_0x809298;switch(fontSizeSwitch){case 0x0:startLayer=L['tileLayer'](_0x6daf9(0x1f2)+getDayNightMap(),{'maxZoom':0x13,'tileSize':0x200,'zoomOffset':-0x1})[_0x6daf9(0xd9)](map),fontSizeSwitch=0x1;break;case 0x1:startLayer=L[_0x6daf9(0x186)]('https://'+getDayNightMap(),{'maxZoom':0x13})[_0x6daf9(0xd9)](map),fontSizeSwitch=0x0;break;default:startLayer=L[_0x6daf9(0x186)](_0x6daf9(0x1f2)+getDayNightMap(),{'maxZoom':0x13})[_0x6daf9(0xd9)](map),fontSizeSwitch=0x1;break;}return;}function changeRes(){var _0x50c56b=_0x809298;if(resSwitch===0x0)document[_0x50c56b(0x1b9)](_0x50c56b(0xea))[_0x50c56b(0x205)](),resSwitch=0x1;else resSwitch===0x1&&(document['getElementById']('decreaseRes')[_0x50c56b(0x205)](),resSwitch=0x0);}function setThreeD(){var _0xbbada2=_0x809298;if(threeDSwitch===0x0){var _0x5ddc12=new OSMBuildings(map)[_0xbbada2(0xf0)](_0xbbada2(0x1f2)+_0xbbada2(0x14a));threeDSwitch=0x1,map[_0xbbada2(0x19b)](0x12);}else{if(threeDSwitch===0x1){var _0x5ddc12=new OSMBuildings(map)[_0xbbada2(0x15c)]();threeDSwitch=0x0;}}}function setMode(_0x11e5b7){var _0x5e4796=_0x809298;transportMode=[],transportMode[_0x5e4796(0x13b)](_0x11e5b7),setTransportRouter();}function showRain(){var _0x296746=_0x809298;if(rainmapSwitch===0x0)document['getElementById'](_0x296746(0x1e1))['click'](),rainmapSwitch=0x1;else rainmapSwitch===0x1&&(document[_0x296746(0x1b9)](_0x296746(0x1a7))['click'](),rainmapSwitch=0x0);}function showFullscreen(){var _0x533ccd=_0x809298;map[_0x533ccd(0xe9)](),document[_0x533ccd(0x1b9)](_0x533ccd(0x129))['click']();}function setRoundtrip(){roundtripMode===!![]?roundtripMode=![]:roundtripMode=!![];}function setUnitSystem(){imperialUnits===![]?imperialUnits=!![]:imperialUnits=![];}function downloadRoute(){var _0x53953e=_0x809298,_0x258ccd=myGpx,_0x2ff5ab=document['createElement']('a');_0x2ff5ab[_0x53953e(0x1fd)]=_0x53953e(0x190)+encodeURI(_0x258ccd),_0x2ff5ab['target']=_0x53953e(0x1c5),_0x2ff5ab[_0x53953e(0xe8)]=''+new Date()[_0x53953e(0x163)]()['slice'](0x0,0xa)+_0x53953e(0x1b0),_0x2ff5ab[_0x53953e(0x205)]();var _0x39f070=myCsvWp['map'](_0x563506=>_0x563506[_0x53953e(0x18a)](_0x5c0a=>typeof _0x5c0a===_0x53953e(0x1fb)&&_0x5c0a[_0x53953e(0x1fc)](',')>=0x0?'\x22'+_0x5c0a+'\x22':String(_0x5c0a))['join'](','))[_0x53953e(0x1ac)]('\x0a'),_0x3718e2=document['createElement']('a');_0x3718e2[_0x53953e(0x1fd)]='data:attachment/csv,'+encodeURI(_0x39f070),_0x3718e2[_0x53953e(0x149)]=_0x53953e(0x1c5),_0x3718e2['download']=''+new Date()['toISOString']()['slice'](0x0,0xa)+_0x53953e(0x1ee),_0x3718e2[_0x53953e(0x205)]();}function createPdf(){var _0xeb4063=_0x809298;const {jsPDF:_0xa92ba1}=window[_0xeb4063(0x119)],_0x5ddaca=new _0xa92ba1({'orientation':'p','unit':'mm','format':'a4','putOnlyUsedFonts':!![],'floatPrecision':0x10});_0x5ddaca[_0xeb4063(0x155)]({'title':'Routing\x20Summary','subject':'This\x20is\x20the\x20subject','author':'Me','keywords':_0xeb4063(0xc3),'creator':_0xeb4063(0xe4),'date':new Date()[_0xeb4063(0x163)]()['slice'](0x0,0xa)}),_0x5ddaca[_0xeb4063(0x144)](0xb);let _0x4e53ba=[],_0x485670=[];const _0x2cc87c=document[_0xeb4063(0x12b)](_0xeb4063(0x125));for(i=0x0;i<currentMarkers[_0xeb4063(0x141)];i++){_0x4e53ba['push'](_0x2cc87c[i][_0xeb4063(0x1b3)]);}for(i=currentMarkers['length'];i<_0x2cc87c['length'];i++){_0x485670[_0xeb4063(0x13b)](_0x2cc87c[i][_0xeb4063(0x1b3)]);}function _0x52e7d2(_0x5102cd,_0x1b882f,_0x3b957f){var _0x4dc665=_0xeb4063;return _0x5102cd[_0x4dc665(0x113)](_0x1b882f,_0x3b957f)[_0x4dc665(0x1ac)](_0x1b882f)[_0x4dc665(0x141)];}let _0x2bdf87=0x19,_0x2bc065=0xa;document[_0xeb4063(0x1b9)](_0xeb4063(0x1d0))[_0xeb4063(0x205)](),_0x5ddaca[_0xeb4063(0x1bf)]('Distance:\x20'+summary[0x0],0x19,_0x2bc065),_0x2bc065+=0x5,_0x5ddaca[_0xeb4063(0x1bf)]('Duration:\x20'+summary[0x1]+_0xeb4063(0xd8),0x19,_0x2bc065),_0x2bc065+=0x5,_0x5ddaca['text'](_0xeb4063(0x106)+summary[0x2],0x19,_0x2bc065),_0x2bc065+=0xa,_0x5ddaca[_0xeb4063(0x197)](undefined,_0xeb4063(0x108))[_0xeb4063(0x1bf)](_0xeb4063(0x11a),0x19,_0x2bc065)[_0xeb4063(0x197)](undefined,_0xeb4063(0x114)),_0x2bc065+=0x5;if(_0x4e53ba[0x0][_0xeb4063(0x141)]>0x50){var _0x49233f=_0x5ddaca[_0xeb4063(0x133)](_0x4e53ba[0x0],0x50);_0x5ddaca[_0xeb4063(0x1bf)](_0x49233f,0x19,_0x2bc065),_0x2bc065+=0x14;}else _0x5ddaca[_0xeb4063(0x1bf)](_0x4e53ba[0x0],_0x2bdf87,_0x2bc065),_0x2bc065+=0x14;_0x5ddaca[_0xeb4063(0x197)](undefined,_0xeb4063(0x108))['text'](_0xeb4063(0x148),0x19,_0x2bc065)[_0xeb4063(0x197)](undefined,_0xeb4063(0x114)),_0x2bc065+=0x5;if(_0x4e53ba[waypoints[0x0][_0xeb4063(0x141)]-0x1][_0xeb4063(0x141)]>0x5f){var _0x49233f=_0x5ddaca[_0xeb4063(0x133)](_0x4e53ba[waypoints[0x0][_0xeb4063(0x141)]-0x1],0x5a);_0x5ddaca['text'](_0x49233f,0x19,_0x2bc065),_0x2bc065+=0xf;}else _0x5ddaca[_0xeb4063(0x1bf)](_0x4e53ba[waypoints[0x0][_0xeb4063(0x141)]-0x1],_0x2bdf87,_0x2bc065),_0x2bc065+=0xf;_0x2bc065+=0xa,_0x5ddaca[_0xeb4063(0x197)](undefined,'bold')['text'](_0xeb4063(0x16b),0x19,_0x2bc065)[_0xeb4063(0x197)](undefined,_0xeb4063(0x114)),_0x2bc065+=0x5;for(i=0x0;i<_0x4e53ba[_0xeb4063(0x141)];i++){if(_0x2bc065%0x122===0x0||_0x2bc065%0x12c===0x0)_0x5ddaca[_0xeb4063(0x1db)](),_0x2bc065=0xa;else{if(_0x4e53ba[i][_0xeb4063(0x141)]>0x5f){var _0x49233f=_0x5ddaca[_0xeb4063(0x133)]('['+[i+0x1]+_0xeb4063(0xca)+_0x4e53ba[i],0x5a);_0x5ddaca['text'](_0x49233f,0x19,_0x2bc065),_0x2bc065+=0x14;}else _0x5ddaca[_0xeb4063(0x1bf)]('['+[i+0x1]+_0xeb4063(0xca)+_0x4e53ba[i],_0x2bdf87,_0x2bc065),_0x2bc065+=0xa;}}_0x2bc065+=0x5,_0x5ddaca[_0xeb4063(0x197)](undefined,_0xeb4063(0x108))[_0xeb4063(0x1bf)](_0xeb4063(0x1c9),0x19,_0x2bc065)[_0xeb4063(0x197)](undefined,_0xeb4063(0x114)),_0x2bc065+=0x5;for(i=0x0;i<_0x485670['length'];i++){if(_0x2bc065%0x122===0x0||_0x2bc065%0x127===0x0){_0x5ddaca[_0xeb4063(0x1db)](),_0x2bc065=0xa;var _0x2d167a=_0x485670[i],_0x17ebe7=_0x52e7d2(_0x2d167a,'\x0a',0x1),_0x113a28=_0x52e7d2(_0x2d167a,'\x0a',0x2),_0x312bcf=['['+_0x2d167a[_0xeb4063(0x17c)](0x0,_0x17ebe7)+_0xeb4063(0xca)+_0x2d167a['slice'](_0x17ebe7+0x1,_0x113a28)+'\x20('+_0x2d167a[_0xeb4063(0x17c)](_0x113a28+0x1,_0x2d167a[_0xeb4063(0x141)])+')'];_0x5ddaca['text'](_0x312bcf,0x19,_0x2bc065),_0x2bc065+=0x5;}else{var _0x2d167a=_0x485670[i],_0x17ebe7=_0x52e7d2(_0x2d167a,'\x0a',0x1),_0x113a28=_0x52e7d2(_0x2d167a,'\x0a',0x2),_0x312bcf=['['+_0x2d167a[_0xeb4063(0x17c)](0x0,_0x17ebe7)+_0xeb4063(0xca)+_0x2d167a[_0xeb4063(0x17c)](_0x17ebe7+0x1,_0x113a28)+'\x20('+_0x2d167a[_0xeb4063(0x17c)](_0x113a28+0x1,_0x2d167a[_0xeb4063(0x141)])+')'];_0x5ddaca[_0xeb4063(0x1bf)](_0x312bcf,0x19,_0x2bc065),_0x2bc065+=0x5;}}_0x5ddaca[_0xeb4063(0xd2)](new Date()[_0xeb4063(0x163)]()['slice'](0x0,0xa)+'_route.pdf');}function createMapsUrl(){var _0x36ed61=_0x809298;const _0xe92bca=_0x36ed61(0x1f2)+_0x36ed61(0xe2)+_0x36ed61(0xfb)+_0x36ed61(0x1dc);let _0x3ebe22=[];for(i=0x0;i<waypoints[0x0]['length'];i++){_0x3ebe22[_0x36ed61(0x13b)]([waypoints[0x0][i][_0x36ed61(0x19a)][0x1],waypoints[0x0][i][_0x36ed61(0x19a)][0x0]]);}const _0x5ccb47=_0xe92bca[_0x36ed61(0x19c)](_0x3ebe22[_0x36ed61(0x1ac)]('/'));window[_0x36ed61(0x15f)](_0x5ccb47);}function returnDistanceFormat(_0x20e45f){var _0x22ca63=_0x809298;if(imperialUnits===![]){if(_0x20e45f==0x0)return'🏁';return _0x20e45f<=0x3e8?Math[_0x22ca63(0xbf)](_0x20e45f)+'m':Math[_0x22ca63(0xbf)](_0x20e45f/0x3e8)+'km';}else{if(imperialUnits===!![]){if(_0x20e45f==0x0)return'🏁';return _0x20e45f*3.28084<=0x14a0?Math[_0x22ca63(0xbf)](_0x20e45f*3.28084)+'ft':Math[_0x22ca63(0xbf)](_0x20e45f*3.28084/0x14a0)+'mi';}}}document[_0x809298(0x16c)]('DOMContentLoaded',setMap());function _0x5e7f(){var _0x241c6f=['Tooltip','locate','</b></div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div>','min\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<br>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22summaryTitle\x20d-flex\x20d-row\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<b\x20class=\x22me-1\x22>Transport:</b>','addPage','/maps/dir/','#0066ff','cryptoBtn','flyTo','lat','startRainmap','DateTimeFormat','children','https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}','\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<section\x20class=\x22d-flex\x20flex-column\x22\x20style=\x22flex:\x2011\x201\x200;\x22\x20id=\x22','bg-light','TileLayer','83XmjygiBKXCMSKyqwsS9JKGqVyWpU5ByH3aDpDxHLbz8gLxNRcJoFg1bS6S1ojQNUL67vw5wApwzb97ULv2zUb4KmF4pok','error','2751225rkNXMV','json','myChart','14HzQIcI','_waypoints.csv','smallRouteBtn','#infoBtn','126VItyuk','https://','instructions','\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<section\x20class=\x22d-flex\x20flex-column\x22\x20style=\x22flex:\x2011\x201\x200;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22mb-1\x20px-1\x22>','data-bs-theme','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20class=\x22list-group-item\x20list-group-item-action\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20style=\x22display:\x20grid;\x20grid-template-columns:\x201fr\x208fr\x201fr;\x20gap:\x2010px;\x20border:\x20none;\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20onclick=\x22flyToMarker(','_leaflet_id','preventDefault','\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20onclick=\x22createCoordinate(id)\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<i\x20class=\x22bi\x20bi-geo-alt-fill\x22\x20id=\x22locIcon\x22></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','max','string','indexOf','href','c_darkmode','rainviewer','d-flex','BeautifyIcon','verified','data','d-none','click','&copy;\x20<a\x20href=\x22https://stadiamaps.com/\x22>Stadia\x20Maps</a>\x20&copy;\x20<a\x20href=\x22https://openmaptiles.org/\x22>OpenMapTiles</a>\x20&copy;\x20<a\x20href=\x22http://openstreetmap.org\x22>OpenStreetMap</a>\x20','light','mapbox/driving','dark','Opacity:','Height\x20in\x20Meters','map4','display','sidebar-wrapper','bi-brightness-high','any','badgeMarkerCount','Cannot\x20find\x20exact\x20address.','Arial','matchMedia','searchBar','innerHTML','get','round',',\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','a66xTw4YiffY2tY2NjJwf9WQ475BKo8K4d','routesfound','summary,\x20route,\x20navigation,\x20waypoints,\x20pdf','<i\x20class=\x22bi\x20bi-clipboard-check-fill\x22></i>','none','driving','flexSwitchCheckDefault8','csvInput','elevation',']\x20\x20','43381dentRV','MiniMap','find','pk.eyJ1IjoicGFzcGFzcGFzMTIzNDEyMzQiLCJhIjoiY2xqZGpocThyMDU1ZDNsbGxuM2Vsc3pqMyJ9.SpLF-rZfUnZxqoq3ZqpVfg','add','flexSwitchCheckDefault7','waypoints','save','WW2staiQPMw5oLguhs93utQ5nJaA49PNqTgas4MDqat2QyLVQcmTnrV5SmaGoqG7qeP1snZ3JNazkMuz4ERf1kJe1h9CLyidd','map0','section','latLng','lightgray','min','addTo','getInstance','Error:','\x0a\x20\x20\x20\x20\x20\x20\x20\x20<a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20class=\x22list-group-item\x20list-group-item-action\x20d-flex\x20flex-row\x20justify-content-between\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20id=\x22listitem','12jsRmEo','Tiles\x20&copy;\x20Esri\x20&mdash;\x20Source:\x20Esri,\x20i-cubed,\x20USDA,\x20USGS,\x20AEX,\x20GeoEye,\x20Getmapping,\x20Aerogrid,\x20IGN,\x20IGP,\x20UPR-EGP,\x20and\x20the\x20GIS\x20User\x20Community\x20','monotone','screen','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20class=\x22list-group-item\x20list-group-item-action\x20d-flex\x20flex-row\x20justify-content-between\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20id=\x22listitem','www.','map2','ShortestRoute.net','LineString','Height\x20in\x20meters','foot','download','toggleFullscreen','increaseRes','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<input\x20type=\x22search\x22\x20class=\x22form-control\x22\x20id=\x22filterInput\x22\x20placeholder=\x22Filter..\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20onkeyup=\x22filterListitems()\x22\x20/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20type=\x22button\x22\x20class=\x22btn\x20btn\x20btn-light\x22\x20id=\x22sortFilterBtn\x22\x20onclick=\x22sortListIitems()\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<i\x20class=\x22bi\x20bi-sort-alpha-down\x22></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20type=\x22button\x22\x20class=\x22btn\x20btn\x20btn-light\x22\x20id=\x22deleteFilterBtn\x22\x20onclick=\x22deleteFilterInput()\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<i\x20class=\x22bi\x20bi-backspace-fill\x22></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','value','\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22mb-1\x20px-1\x22>','then','nominatim.openstreetmap.org/search.php?q=','load','tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h6><b>Introduction</b></h6>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>By\x20accessing\x20this\x20website\x20you\x20are\x20agreeing\x20to\x20be\x20bound\x20by\x20these\x20website\x20Terms\x20and\x20Conditions\x20of\x20Use\x20and\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20agree\x20that\x20you\x20are\x20responsible\x20for\x20the\x20agreement\x20with\x20any\x20applicable\x20local\x20laws.\x20This\x20website\x20operates\x20under\x20the\x20name\x20\x22ShortestRoute\x22\x20(“we,”\x20“us,”\x20or\x20“our”).\x20These\x20Terms\x20of\x20Use\x20constitute\x20a\x20legally\x20binding\x20agreement\x20made\x20between\x20you,\x20whether\x20personally\x20or\x20on\x20behalf\x20of\x20an\x20entity\x20(“you”)\x20and\x20concerning\x20your\x20access\x20to\x20and\x20use\x20of\x20the\x20website\x20and\x20the\x20services.\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20You\x20agree\x20that\x20by\x20accessing\x20the\x20services,\x20you\x20have\x20read,\x20understood,\x20and\x20agree\x20to\x20be\x20bound\x20by\x20all\x20of\x20these\x20Terms\x20of\x20Use.\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20The\x20materials\x20contained\x20in\x20this\x20website\x20are\x20protected\x20by\x20copyright\x20and\x20trade\x20mark\x20law.\x20If\x20you\x20do\x20not\x20agree\x20with\x20any\x20terms,\x20you\x20are\x20expressly\x20prohibited\x20from\x20using\x20our\x20services\x20and\x20must\x20discontinue\x20use\x20immediately.</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h6><b>Use\x20License</b></h5>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>\x20Our\x20website\x20operates\x20not\x20for\x20profit\x20and\x20free\x20as\x20in\x20\x22freeware\x22.\x20This\x20implies\x20there\x20is\x20no\x20distribution\x20or\x20monetary\x20costs\x20to\x20visitors.\x20Permission\x20is\x20granted\x20to\x20temporarily\x20use\x20the\x20online\x20version\x20on\x20our\x20website\x20for\x20personal,\x20non-commercial\x20transitory\x20application\x20only.\x20This\x20is\x20the\x20grant\x20of\x20a\x20license,\x20not\x20a\x20transfer\x20of\x20title,\x20and\x20under\x20this\x20license\x20you\x20may\x20not:</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>(1)\x20Modify,\x20transfer\x20or\x20copy\x20our\x20created\x20materials\x20such\x20as\x20source\x20code,\x20graphics,\x20user\x20interfaces,\x20texts,\x20photographs,\x20graphics,\x20logos;<br>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20(2)\x20Use\x20of\x20our\x20website\x20for\x20any\x20commercial\x20purpose\x20or\x20for\x20any\x20public\x20display\x20without\x20notice;<br>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20(3)\x20Attempt\x20to\x20reverse\x20engineer,\x20refactor\x20or\x20duplicate\x20the\x20source\x20code\x20of\x20our\x20website;<br>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20(4)\x20Remove\x20any\x20copyright\x20or\x20further\x20notations\x20from\x20our\x20materials;<br>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20(5)\x20Transferring\x20the\x20materials\x20to\x20another\x20person\x20or\x20&quot;mirror&quot;\x20the\x20materials\x20on\x20any\x20other\x20server.</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>This\x20will\x20allow\x20ShortestRoute\x20to\x20terminate\x20upon\x20violations\x20of\x20any\x20of\x20these\x20restrictions.\x20Upon\x20termination,\x20your\x20viewing\x20right\x20will\x20also\x20be\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20terminated\x20or\x20will\x20be\x20banned\x20and\x20you\x20have\x20to\x20destroy\x20any\x20materials\x20of\x20us\x20in\x20your\x20possession\x20whether\x20it\x20is\x20printed\x20or\x20electronic\x20format.</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h6><b>Disclaimer</b></h5>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>All\x20the\x20materials\x20on\x20our\x20website\x20are\x20provided\x20&quot;as\x20is&quot;.\x20We\x20provide\x20no\x20warranties,\x20may\x20it\x20be\x20expressed\x20or\x20implied,\x20therefore\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20negates\x20all\x20other\x20warranties.\x20Furthermore,\x20ShortestRoute\x20does\x20not\x20make\x20any\x20representations\x20concerning\x20the\x20accuracy\x20or\x20reliability\x20of\x20the\x20use\x20of\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20the\x20materials\x20on\x20its\x20website\x20or\x20otherwise\x20relating\x20to\x20such\x20materials\x20or\x20any\x20sites\x20linked\x20to\x20this\x20website.\x20The\x20services\x20are\x20intended\x20for\x20business\x20users\x20who\x20are\x20at\x20least\x2018\x20years\x20old.\x20Persons\x20under\x20the\x20age\x20of\x2018\x20are\x20not\x20permitted\x20to\x20use\x20or\x20register\x20for\x20the\x20services.</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h6><b>Limitations</b></h5>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>ShortestRoute\x20or\x20its\x20partner\x20sites\x20will\x20not\x20be\x20hold\x20accountable\x20for\x20any\x20damages\x20that\x20will\x20arise\x20with\x20the\x20use\x20or\x20inability\x20to\x20use\x20the\x20materials\x20on\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20our\x20website,\x20even\x20if\x20ShortestRoute\x20or\x20an\x20authorize\x20representative\x20of\x20this\x20website\x20has\x20been\x20notified,\x20orally\x20or\x20written,\x20of\x20the\x20possibility\x20of\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20such\x20damage.\x20Some\x20jurisdiction\x20does\x20not\x20allow\x20limitations\x20on\x20implied\x20warranties\x20or\x20limitations\x20of\x20liability\x20for\x20incidental\x20damages,\x20these\x20limitations\x20may\x20not\x20apply\x20to\x20you.</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h6><b>Revisions\x20and\x20Errata</b></h5>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>The\x20materials\x20appearing\x20on\x20ShortestRoute\x20may\x20include\x20technical,\x20typographical,\x20or\x20photographic\x20errors.\x20We\x20will\x20not\x20promise\x20that\x20any\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20of\x20the\x20materials\x20in\x20this\x20website\x20are\x20accurate,\x20complete,\x20or\x20current.\x20We\x20may\x20change\x20the\x20materials\x20contained\x20on\x20its\x20website\x20at\x20any\x20time\x20without\x20notice.\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20We\x20do\x20not\x20make\x20any\x20commitment\x20to\x20update\x20the\x20materials.</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h6><b>Links</b></h5>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>We\x20have\x20not\x20reviewed\x20all\x20of\x20the\x20sites\x20linked\x20to\x20its\x20website\x20and\x20is\x20not\x20responsible\x20for\x20the\x20contents\x20of\x20any\x20such\x20linked\x20site.\x20The\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20presence\x20of\x20any\x20link\x20does\x20not\x20imply\x20endorsement\x20by\x20us\x20of\x20the\x20site.\x20The\x20use\x20of\x20any\x20linked\x20website\x20is\x20at\x20the\x20user\x27s\x20own\x20risk.</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h6><b>Site\x20Terms\x20of\x20Use\x20Modifications</b></h5>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>Supplemental\x20terms\x20and\x20conditions\x20or\x20documents\x20that\x20may\x20be\x20posted\x20on\x20the\x20website\x20from\x20time\x20to\x20time\x20are\x20hereby\x20expressly\x20incorporated\x20herein\x20by\x20reference.\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20It\x20is\x20your\x20responsibility\x20to\x20periodically\x20review\x20these\x20Terms\x20of\x20Use\x20to\x20stay\x20informed\x20as\x20each\x20time\x20you\x20access\x20the\x20services,\x20you\x20will\x20be\x20subject\x20to,\x20and\x20will\x20be\x20deemed\x20to\x20have\x20been\x20made\x20aware\x20of\x20and\x20to\x20have\x20accepted,\x20the\x20then\x20applicable\x20Terms\x20of\x20Use.\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20By\x20using\x20this\x20website,\x20you\x20are\x20agreeing\x20to\x20be\x20bound\x20by\x20the\x20current\x20version\x20of\x20these\x20Terms\x20and\x20Conditions\x20of\x20Use.</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h6><b>Governing\x20Law</b></h5>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>Any\x20claim\x20related\x20to\x20ShortestRoute\x27s\x20website\x20shall\x20be\x20governed\x20by\x20the\x20laws\x20of\x20Country\x20without\x20regards\x20to\x20its\x20conflict\x20of\x20law\x20provisions.\x20For\x20further\x20questions\x20or\x20remarks,\x20please\x20contact\x20us.</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','247116ennUBq','https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.png','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div>','panelsStayOpen-collapseTwo','marker','display_name','lon','filterInput','google.com','sqrt','#sidebar-wrapper','&copy;\x20<a\x20href=\x22https://www.openstreetmap.org/copyright\x22>OpenStreetMap</a>\x20','change','disabled','localeCompare','files','624120GWqeyf','circle','container','Mode:\x20','asin','bold','checked','latlng','stop','topleft','classList','distance','11xmwFzD','flexSwitchCheckDefault5','canvas',')\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</a>','split','normal','setContent','settingsBtn','cos','addLayer','jspdf','Start:\x20','address','Percentage\x20of\x20Route','DOMContentLoaded','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<br>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<b>Duration:</b>\x20','panelsStayOpen-collapseOne','summary','deleteBtn','abcd','Captcha\x20image\x20test\x20has\x20failed!','replace','list-group-item-action','verified\x20event','icon','contentPp','flexSwitchCheckDefault6','mapbox/cycling','getElementsByClassName','hidden.bs.modal','\x20kilometers\x20direct\x20distance\x20away\x20from\x20you.','pow','listitem','map6','router.project-osrm.org/trip/v1/','simpleMapScreenshoter','splitTextToSize','https://tile.opentopomap.org/{z}/{x}/{y}.png','smallNavBtn','Copy','toString','leaf','bike','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20id=\x22liveToast\x22\x20class=\x22toast\x22\x20role=\x22alert\x22\x20aria-live=\x22assertive\x22\x20aria-atomic=\x22true\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22toast-header\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<strong\x20class=\x22me-auto\x22>Route\x20&\x20directions\x20are\x20loading\x20\x20🕒</strong>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20type=\x22button\x22\x20class=\x22btn-close\x22\x20data-bs-dismiss=\x22toast\x22\x20aria-label=\x22Close\x22></button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20','push','https://tile.openstreetmap.org/{z}/{x}/{y}.png','querySelector','.leaflet-control-container','?roundtrip=',')\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20><div><b>','length','clearLayers','nightBtn','setFontSize','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20id=\x22liveToast\x22\x20class=\x22toast\x22\x20role=\x22alert\x22\x20aria-live=\x22assertive\x22\x20aria-atomic=\x22true\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22toast-header\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<strong\x20class=\x22me-auto\x22>Markers\x20are\x20loading\x20\x20🕒</strong>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20type=\x22button\x22\x20class=\x22btn-close\x22\x20data-bs-dismiss=\x22toast\x22\x20aria-label=\x22Close\x22></button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20','&format=jsonv2','liveToast','End:\x20','target','{s}.data.osmbuildings.org/0.2/anonymous/tile/{z}/{x}/{y}.json','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</span></h6>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20type=\x22button\x22\x20class=\x22btn\x20btn-light\x22\x20data-bs-toggle=\x22modal\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20data-bs-target=\x22#upload\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22sidebarActionText\x22><i\x20class=\x22bi\x20bi-cloud-upload-fill\x22></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<small>Import</small>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20type=\x22button\x22\x20class=\x22btn\x20btn-light\x22\x20id=\x22eraserBtn\x22\x20onclick=\x22deleteAllMarkers()\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22sidebarActionText\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<i\x20class=\x22bi\x20bi-trash-fill\x22></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<small>Clear</small>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20type=\x22button\x22\x20class=\x22btn\x20btn-light\x22\x20id=\x22routeBtn\x22\x20onclick=\x22getRoute()\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22sidebarActionText\x22><i\x20class=\x22bi\x20bi-bounding-box\x22></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<small>Route</small>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20','toggle','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22accordion\x22\x20id=\x22accordionPanelsStayOpenExample\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22accordion-item\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h2\x20class=\x22accordion-header\x22\x20id=\x22panelsStayOpen-headingZeroZero\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22accordion-button\x22\x20type=\x22button\x22\x20data-bs-toggle=\x22collapse\x22\x20data-bs-target=\x22#panelsStayOpen-collapseZeroZero\x22\x20aria-expanded=\x22true\x22\x20aria-controls=\x22panelsStayOpen-collapseZeroZero\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<b>Summary</b>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</h2>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20id=\x22panelsStayOpen-collapseZeroZero\x22\x20class=\x22accordion-collapse\x20collapse\x20show\x22\x20aria-labelledby=\x22panelsStayOpen-headingZeroZero\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22accordion-body\x22\x20id=\x22accordionBodZero\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<b>Distance:</b>\x20','btn-dark','road','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22d-flex\x20flex-row\x20justify-content-between\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20class=\x22d-flex\x20flex-column\x20p-3\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20onclick=\x22flyToMarker(','Toast','<i\x20class=\x22bi\x20bi-clipboard-fill\x22></i>','btn-light','</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<small\x20class=\x22mb-1\x20px-1\x22>','setProperties','</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20class=\x22tag\x20pt-3\x20pl-3\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20id=\x22','sin','totalTime','rgba(255,\x20255,\x20255,\x200)','Hour:','control','remove','smallReturnBtn','start','open','#0066cc','Copied','mapbox/walking','toISOString','Exact\x20street\x20cannot\x20be\x20accessed!','toastField','mapLayerBtn','Map\x20tiles\x20by\x20<a\x20href=\x22http://stamen.com\x22>Stamen\x20Design</a>,\x20<a\x20href=\x22http://creativecommons.org/licenses/by/3.0\x22>CC\x20BY\x203.0</a>\x20&mdash;\x20Map\x20data\x20&copy;\x20<a\x20href=\x22https://www.openstreetmap.org/copyright\x22>OpenStreetMap</a>\x20','font-awesome','style','bg-dark','Waypoints:','addEventListener','resolvedOptions','last','DetailLevel','parentElement','white','https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png','&limit=1&format=jsonv2','(prefers-color-scheme:\x20dark)','moonIcon','filterArea','There\x20are\x20no\x20markers\x20placed\x20on\x20the\x20map!','Map\x20data:\x20&copy;\x20<a\x20href=\x22https://www.openstreetmap.org/copyright\x22>OpenStreetMap</a>\x20,\x20<a\x20href=\x22http://viewfinderpanoramas.org\x22>SRTM</a>\x20|\x20Map\x20style:\x20&copy;\x20<a\x20href=\x22https://opentopomap.org\x22>OpenTopoMap</a>\x20(<a\x20href=\x22https://creativecommons.org/licenses/by-sa/3.0/\x22>CC-BY-SA</a>)\x20','</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<small\x20class=\x22mb-1\x20px-1\x22>','token','blue','slice','4812aliaDY','19dbDtma','lockBtn','backgroundColor','qzq3er0c0cc0hnfs46v4wrmcyrxjqeh7fy9szfcghu','bi-moon-stars-fill','transportBtn','reduce','getAttribute','tileLayer','map3','setAttribute','body','map','https://api.open-meteo.com/v1/elevation?','donateBtn','Routing','</small>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</section>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22d-flex\x20flex-column\x20justify-content-between\x22\x20style=\x22flex:\x201\x201\x202;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<i\x20class=\x22bi\x20bi-x-square-fill\x22\x20onclick=\x22removeListLoc(parentNode.parentNode.id)\x22></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</a>','#d3d3d3','data:attachment/gpx,','timeZone',')\x22></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','documentElement','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22padding:\x200\x201rem\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<i\x20class=\x22bi\x20bi-zoom-in\x22\x20onclick=\x22flyToMarker(','clipboard','nav-rotated','setFont','&limit=3&format=jsonv2','setView','location','setZoom','concat','error\x20event','writeText','navbar','./resources/data/countries.json','#navbar-toggler-icon','line','longitude=','lng','getElementsByTagName','Control','hideRainmap','waypoint_index','listitems','searchBtn','LayerGroup','join','show','actionArea','totalDistance','_route.gpx','matches','textContent','innerText','111334YjELaT','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<hr\x20class=\x22hr\x22\x20/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22accordion\x22\x20id=\x22accordionPanelsStayOpenExample\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22accordion-item\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h2\x20class=\x22accordion-header\x22\x20id=\x22panelsStayOpen-headingZeroOne\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22accordion-button\x22\x20type=\x22button\x22\x20data-bs-toggle=\x22collapse\x22\x20data-bs-target=\x22#panelsStayOpen-collapseZero\x22\x20aria-expanded=\x22true\x22\x20aria-controls=\x22panelsStayOpen-collapseZero\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<b>Elevation</b>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</h2>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20id=\x22panelsStayOpen-collapseZero\x22\x20class=\x22accordion-collapse\x20collapse\x20show\x22\x20aria-labelledby=\x22panelsStayOpen-headingZero\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22accordion-body\x22\x20id=\x22accordionBodZeroOne\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<canvas\x20id=\x22myChart\x22></canvas>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>','closeCaptchaModal','log','getElementById','</small>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</section>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22d-flex\x20flex-column\x20justify-content-between\x22\x20style=\x22flex:\x201\x201\x202;\x22\x20id=\x22','flatMap','routes','index','confirm','text','appendChild','infoBtn','\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22mb-1\x20px-1\x22>','sort','undefined','_blank','#3355FF','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22btn-group\x20btn-group-lg\x22\x20role=\x22group\x22\x20aria-label=\x22Default\x20button\x20group\x22\x20id=\x22actionBtns\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22btn\x20btn-light\x20d-flex\x20d-row\x22\x20type=\x22button\x22\x20id=\x22lockBtn\x22\x20onclick=\x22actDeactMarking()\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22sidebarActionText\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<i\x20class=\x22bi\x20bi-geo-alt-fill\x22></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<small>Drop</small>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h6><span\x20class=\x22badge\x20text-bg-primary\x22\x20id=\x22badgeMarkerCount\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','_latlng','Directions:','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22btn-group\x20btn-group-lg\x22\x20role=\x22group\x22\x20aria-label=\x22Default\x20button\x20group\x22\x20id=\x22actionBtns2\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20type=\x22button\x22\x20class=\x22btn\x20btn-light\x22\x20onclick=\x22goBack()\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22sidebarActionText\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<i\x20class=\x22bi\x20bi-arrow-left-circle-fill\x20me-1\x22></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<small>Back</small>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20type=\x22button\x22\x20class=\x22btn\x20btn-light\x22\x20onclick=\x22createPdf()\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22sidebarActionText\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<i\x20class=\x22bi\x20bi-printer-fill\x20me-1\x22></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<small>Print</small>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20type=\x22button\x22\x20class=\x22btn\x20btn-light\x22\x20onclick=\x22downloadRoute()\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22sidebarActionText\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<i\x20class=\x22bi\x20bi-cloud-download-fill\x20me-1\x22></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<small>Export</small>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20type=\x22button\x22\x20class=\x22btn\x20btn-light\x22\x20onclick=\x22createMapsUrl()\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22sidebarActionText\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<i\x20class=\x22bi\x20bi-sign-turn-right-fill\x22></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<small>Navigate</small>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','coordinates','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h6><b>Types\x20of\x20Data\x20Automatically\x20Collected</b></h6>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>Usage\x20Data\x20is\x20collected\x20automatically\x20when\x20visiting\x20this\x20website.\x20Usage\x20data\x20may\x20include\x20information\x20such\x20as\x20your\x20Device\x27s\x20Internet\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20Protocol\x20address\x20(e.g.\x20IP\x20address),\x20browser\x20type,\x20browser\x20version,\x20the\x20functionalities\x20of\x20your\x20use,\x20the\x20time\x20and\x20date\x20of\x20your\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20visit,\x20the\x20time\x20spent\x20on\x20those\x20pages,\x20unique\x20device\x20identifiers\x20and\x20other\x20diagnostic\x20data.\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20When\x20you\x20access\x20this\x20website\x20by\x20or\x20through\x20a\x20mobile\x20device,\x20We\x20may\x20collect\x20certain\x20information\x20automatically,\x20including,\x20but\x20not\x20limited\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20to,\x20the\x20type\x20of\x20mobile\x20device\x20you\x20use,\x20your\x20mobile\x20device\x20unique\x20ID,\x20the\x20IP\x20address\x20of\x20your\x20mobile\x20device,\x20your\x20mobile\x20operating\x20system,\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20the\x20type\x20of\x20mobile\x20Internet\x20browser\x20you\x20use,\x20unique\x20device\x20identifiers\x20and\x20other\x20diagnostic\x20data.\x20We\x20may\x20also\x20collect\x20information\x20that\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20your\x20browser\x20sends\x20whenever\x20you\x20visit,\x20use\x20or\x20access\x20our\x20website\x20by\x20or\x20through\x20a\x20mobile\x20device.</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h6><b>Tracking\x20Technologies\x20and\x20Cookies</b></h6>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>We\x20use\x20Cookies\x20and\x20similar\x20tracking\x20technologies\x20to\x20track\x20the\x20visitors\x27\x20activity\x20or\x20store\x20certain\x20information.\x20Tracking\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20technologies\x20used\x20are\x20beacons,\x20tags,\x20and\x20scripts\x20to\x20collect\x20and\x20track\x20information\x20and\x20to\x20improve\x20and\x20analyze\x20this\x20website.\x20The\x20technologies\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20we\x20use\x20may\x20include:</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>\x20Cookies\x20or\x20Browser\x20Cookies:\x20A\x20cookie\x20is\x20a\x20small\x20file\x20placed\x20on\x20your\x20device.\x20You\x20can\x20instruct\x20your\x20browser\x20to\x20refuse\x20all\x20cookies\x20or\x20to\x20indicate\x20when\x20a\x20cookie\x20is\x20being\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20sent.\x20However,\x20if\x20you\x20do\x20not\x20accept\x20cookies,\x20you\x20may\x20not\x20be\x20able\x20to\x20use\x20some\x20parts\x20of\x20our\x20website.\x20Unless\x20you\x20have\x20adjusted\x20your\x20browser\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20setting\x20so\x20that\x20it\x20will\x20refuse\x20cookies,\x20our\x20website\x20may\x20use\x20Cookies.\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>\x20Web\x20Beacons:\x20Certain\x20sections\x20of\x20our\x20website\x20may\x20contain\x20small\x20electronic\x20files\x20known\x20as\x20web\x20beacons\x20(also\x20referred\x20to\x20as\x20clear\x20gifs,\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20pixel\x20tags,\x20and\x20single-pixel\x20gifs)\x20that\x20permit\x20us,\x20for\x20example,\x20to\x20count\x20users\x20who\x20have\x20visited\x20those\x20parts\x20of\x20of\x20a\x20website\x20and\x20for\x20other\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20related\x20website\x20statistics\x20(for\x20example,\x20recording\x20the\x20popularity\x20of\x20a\x20certain\x20section\x20and\x20verifying\x20system\x20integrity).\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>Cookies\x20can\x20be\x20&quot;Persistent&quot;\x20or\x20&quot;Session&quot;\x20Cookies.\x20Persistent\x20cookies\x20remain\x20on\x20your\x20personal\x20computer\x20or\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20mobile\x20device\x20when\x20you\x20go\x20offline,\x20while\x20Session\x20Cookies\x20are\x20deleted\x20as\x20soon\x20as\x20you\x20close\x20your\x20web\x20browser.</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h6><b>Strictly\x20necessary\x20Cookies</b></h6>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>These\x20Cookies\x20are\x20essential\x20to\x20provide\x20you\x20with\x20services\x20available\x20through\x20the\x20website\x20and\x20to\x20enable\x20you\x20to\x20use\x20some\x20of\x20its\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20features.\x20They\x20help\x20to\x20authenticate\x20users\x20and\x20prevent\x20fraudulent\x20use\x20of\x20website.\x20Without\x20these\x20Cookies,\x20the\x20services\x20that\x20you\x20have\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20asked\x20for\x20cannot\x20be\x20provided,\x20and\x20We\x20only\x20use\x20these\x20Cookies\x20to\x20securely\x20provide\x20you\x20with\x20those\x20services.</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h6><b>Performance\x20and\x20Analytics\x20Cookies</b></h6>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>These\x20Cookies\x20are\x20used\x20to\x20track\x20information\x20about\x20traffic\x20to\x20the\x20website\x20and\x20how\x20users\x20use\x20the\x20website.\x20The\x20information\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20gathered\x20via\x20these\x20Cookies\x20may\x20directly\x20or\x20indirectly\x20identify\x20you\x20as\x20an\x20individual\x20visitor.\x20This\x20is\x20because\x20the\x20information\x20collected\x20is\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20typically\x20linked\x20to\x20a\x20pseudonymous\x20identifier\x20associated\x20with\x20the\x20device\x20you\x20use\x20to\x20access\x20the\x20website.\x20We\x20may\x20also\x20use\x20these\x20Cookies\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20to\x20test\x20new\x20functions,\x20features\x20or\x20layouts\x20of\x20our\x20website\x20in\x20order\x20to\x20see\x20how\x20our\x20visitors\x20react\x20to\x20them.</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h6><b>Advertising\x20or\x20Targeting\x20Cookies</b></h6>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>These\x20Cookies\x20allow\x20us\x20or\x20our\x20partners\x20to\x20remember\x20choices\x20you\x20make\x20when\x20you\x20use\x20the\x20website,\x20such\x20as\x20remembering\x20your\x20login\x20details\x20or\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20language\x20preference.\x20The\x20purpose\x20of\x20these\x20Cookies\x20is\x20to\x20provide\x20you\x20with\x20a\x20more\x20personal\x20experience\x20and\x20to\x20avoid\x20you\x20having\x20to\x20re-enter\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20your\x20preferences\x20every\x20time\x20you\x20use\x20the\x20website.\x20Currently\x20these\x20cookies\x20are\x20not\x20used.</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h6><b>Payments</b></h6>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>We\x20provide\x20the\x20possibility\x20to\x20visitors\x20to\x20donate\x20for\x20the\x20development\x20and\x20maintainance\x20of\x20our\x20website.\x20In\x20that\x20case,\x20third-party\x20(cryptocurrency)\x20payment\x20processing.\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20The\x20information\x20is\x20provided\x20directly\x20to\x20our\x20third-party\x20processors\x20whose\x20use\x20of\x20your\x20personal\x20information\x20is\x20governed\x20by\x20their\x20Privacy\x20Policy.</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h6><b>Links\x20to\x20Other\x20websites</b></h6>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>Our\x20Service\x20may\x20contain\x20links\x20to\x20other\x20websites\x20that\x20are\x20not\x20operated\x20by\x20Us.\x20If\x20you\x20click\x20on\x20a\x20third\x20party\x20link,\x20you\x20will\x20be\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20directed\x20to\x20that\x20third\x20party\x27s\x20site.\x20We\x20strongly\x20advise\x20you\x20to\x20review\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20the\x20Privacy\x20Policy\x20of\x20every\x20site\x20you\x20visit.\x20We\x20have\x20no\x20control\x20over\x20and\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20assume\x20no\x20responsibility\x20for\x20the\x20content,\x20privacy\x20policies\x20or\x20practices\x20of\x20any\x20third\x20party\x20sites\x20or\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20services.</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','&source=first&destination=','splice','248660iSKcgd','screenshotBtn','tile.openstreetmap.org/{z}/{x}/{y}.png','https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png','3843816LchPqy','mapbox','card','ltc1q666y6ftnpzfghzmdqe8te7qsf4zg80r959938d'];_0x5e7f=function(){return _0x241c6f;};return _0x5e7f();}function setMap(){var _0x152e74=_0x809298;async function _0x3744c8(_0x421806){var _0x7a0330=_0x4b15;const _0x35e0b6=await fetch(_0x421806);return await _0x35e0b6[_0x7a0330(0x1eb)]();}_0x3744c8(_0x152e74(0x1a0))[_0x152e74(0xee)](_0x57fbcf=>{var _0x46bb72=_0x152e74;for(i=0x0;i<_0x57fbcf[_0x46bb72(0x141)];i++){if(_0x57fbcf[i]['timezone']===Intl[_0x46bb72(0x1e2)]()[_0x46bb72(0x16d)]()[_0x46bb72(0x191)]){map[_0x46bb72(0x199)]([_0x57fbcf[i]['lat'],_0x57fbcf[i][_0x46bb72(0x1a4)]],0x3);break;}}});}function copyTextToClipboard(_0x2defbb){var _0x21d5d3=_0x809298;_0x2defbb['innerHTML']=_0x21d5d3(0xc4);let _0x407f71=_0x2defbb['id'];navigator[_0x21d5d3(0x195)][_0x21d5d3(0x19e)](_0x407f71);const _0x303bf8=bootstrap[_0x21d5d3(0x1d7)][_0x21d5d3(0xda)](_0x2defbb);_0x303bf8[_0x21d5d3(0x115)]({'.tooltip-inner':_0x21d5d3(0x161)});}var donateFr=document[_0x809298(0x1b9)]('donateFrame');donateFr['addEventListener'](_0x809298(0x12c),function(){var _0x28d90a=_0x809298,_0x6c4dc=document[_0x28d90a(0x1b9)]('bc1qws3sv2w7t9tfe2gv0nh0999zfjgnqeamcgp8rj'),_0x30ea3c=document[_0x28d90a(0x1b9)]('83XmjygiBKXCMSKyqwsS9JKGqVyWpU5ByH3aDpDxHLbz8gLxNRcJoFg1bS6S1ojQNUL67vw5wApwzb97ULv2zUb4KmF4pok'),_0x38aac7=document[_0x28d90a(0x1b9)](_0x28d90a(0x1d6)),_0xdd10ab=document[_0x28d90a(0x1b9)](_0x28d90a(0xd3)),_0x262a38=document[_0x28d90a(0x1b9)](_0x28d90a(0xc1)),_0x1f05e8=document[_0x28d90a(0x1b9)](_0x28d90a(0x181));_0x6c4dc[_0x28d90a(0xbd)]=_0x28d90a(0x152),_0x30ea3c[_0x28d90a(0xbd)]=_0x28d90a(0x152),_0x38aac7['innerHTML']=_0x28d90a(0x152),_0xdd10ab[_0x28d90a(0xbd)]=_0x28d90a(0x152),_0x262a38['innerHTML']='<i\x20class=\x22bi\x20bi-clipboard-fill\x22></i>',_0x1f05e8[_0x28d90a(0xbd)]=_0x28d90a(0x152);const _0x1ce725=bootstrap['Tooltip'][_0x28d90a(0xda)](_0x6c4dc);_0x1ce725[_0x28d90a(0x115)]({'.tooltip-inner':_0x28d90a(0x136)});const _0x550950=bootstrap[_0x28d90a(0x1d7)][_0x28d90a(0xda)](_0x30ea3c);_0x550950[_0x28d90a(0x115)]({'.tooltip-inner':'Copy'});const _0x1110b3=bootstrap[_0x28d90a(0x1d7)][_0x28d90a(0xda)](_0x38aac7);_0x1110b3[_0x28d90a(0x115)]({'.tooltip-inner':'Copy'});const _0x5cd3a0=bootstrap['Tooltip'][_0x28d90a(0xda)](_0xdd10ab);_0x5cd3a0[_0x28d90a(0x115)]({'.tooltip-inner':'Copy'});const _0x913a95=bootstrap[_0x28d90a(0x1d7)][_0x28d90a(0xda)](_0x262a38);_0x913a95[_0x28d90a(0x115)]({'.tooltip-inner':_0x28d90a(0x136)});const _0x232b9a=bootstrap['Tooltip'][_0x28d90a(0xda)](_0x1f05e8);_0x232b9a[_0x28d90a(0x115)]({'.tooltip-inner':_0x28d90a(0x136)});});function restoreCryptoModal(){var _0x253c45=_0x809298,_0x6b1599=document[_0x253c45(0x1b9)]('bc1qws3sv2w7t9tfe2gv0nh0999zfjgnqeamcgp8rj'),_0x128954=document[_0x253c45(0x1b9)](_0x253c45(0x1e8)),_0xddd75=document['getElementById'](_0x253c45(0x1d6)),_0x44b663=document['getElementById'](_0x253c45(0xd3)),_0x2634d9=document[_0x253c45(0x1b9)]('a66xTw4YiffY2tY2NjJwf9WQ475BKo8K4d'),_0x1ded8a=document[_0x253c45(0x1b9)]('qzq3er0c0cc0hnfs46v4wrmcyrxjqeh7fy9szfcghu');_0x6b1599[_0x253c45(0xbd)]=_0x253c45(0x152),_0x128954['innerHTML']=_0x253c45(0x152),_0xddd75[_0x253c45(0xbd)]=_0x253c45(0x152),_0x44b663[_0x253c45(0xbd)]=_0x253c45(0x152),_0x2634d9[_0x253c45(0xbd)]='<i\x20class=\x22bi\x20bi-clipboard-fill\x22></i>',_0x1ded8a['innerHTML']='<i\x20class=\x22bi\x20bi-clipboard-fill\x22></i>';const _0x3305a0=bootstrap[_0x253c45(0x1d7)][_0x253c45(0xda)](_0x6b1599);_0x3305a0['setContent']({'.tooltip-inner':'Copy'});const _0x3d0baf=bootstrap['Tooltip'][_0x253c45(0xda)](_0x128954);_0x3d0baf['setContent']({'.tooltip-inner':'Copy'});const _0x59a3b7=bootstrap['Tooltip'][_0x253c45(0xda)](_0xddd75);_0x59a3b7['setContent']({'.tooltip-inner':_0x253c45(0x136)});const _0x268170=bootstrap[_0x253c45(0x1d7)][_0x253c45(0xda)](_0x44b663);_0x268170[_0x253c45(0x115)]({'.tooltip-inner':'Copy'});const _0x4a17ac=bootstrap['Tooltip'][_0x253c45(0xda)](_0x2634d9);_0x4a17ac[_0x253c45(0x115)]({'.tooltip-inner':_0x253c45(0x136)});const _0x56e2c7=bootstrap[_0x253c45(0x1d7)]['getInstance'](_0x1ded8a);_0x56e2c7[_0x253c45(0x115)]({'.tooltip-inner':_0x253c45(0x136)});}document['querySelector'](_0x809298(0x1f0))[_0x809298(0x16c)](_0x809298(0x205),()=>{var _0x270e02=_0x809298;document[_0x270e02(0x13d)](_0x270e02(0xfd))[_0x270e02(0x10d)]['toggle']('active-nav');});function clearSearchBar(){var _0x314b12=_0x809298;document[_0x314b12(0x1b9)](_0x314b12(0x215))[_0x314b12(0xec)]='',document['getElementById'](_0x314b12(0x1d5))[_0x314b12(0xbd)]='',searchDropdown=[],coordTouples=[];}function filterListitems(){var _0x4392bf=_0x809298,_0x74a5e0=document[_0x4392bf(0x1b9)](_0x4392bf(0x1a9)),_0xd96c5e=_0x74a5e0[_0x4392bf(0x1a5)](_0x4392bf(0xd5)),_0x2b34df=document['getElementById'](_0x4392bf(0xfa)),_0x530b20=_0x2b34df[_0x4392bf(0xec)]['toUpperCase'](),_0x4682d8;for(i=0x0;i<_0xd96c5e[_0x4392bf(0x141)];i++){p=_0xd96c5e[i][_0x4392bf(0x1a5)]('p')[0x0],_0x4682d8=p[_0x4392bf(0x1b2)]||p[_0x4392bf(0x1b3)],_0x4682d8['toUpperCase']()[_0x4392bf(0x1fc)](_0x530b20)>-0x1?(_0xd96c5e[i][_0x4392bf(0x170)]['classList'][_0x4392bf(0x15c)](_0x4392bf(0x204)),_0xd96c5e[i][_0x4392bf(0x170)][_0x4392bf(0x10d)][_0x4392bf(0xcf)]('d-flex')):(_0xd96c5e[i]['parentElement']['classList']['remove'](_0x4392bf(0x200)),_0xd96c5e[i][_0x4392bf(0x170)][_0x4392bf(0x10d)][_0x4392bf(0xcf)](_0x4392bf(0x204)));}}function sortListIitems(){var _0x2ca8bf=_0x809298;const _0x100c91=document[_0x2ca8bf(0x1b9)]('listitems')[_0x2ca8bf(0x1a5)]('a');let _0x2a3947=[],_0x1e37a7=[];for(i=0x0;i<_0x100c91[_0x2ca8bf(0x141)];i++){_0x2a3947['push'](_0x100c91[i]);}_0x2a3947['sort']((_0x50748e,_0xf62045)=>_0x50748e[_0x2ca8bf(0x1b3)]['toUpperCase']()[_0x2ca8bf(0x101)](_0xf62045['innerText']['toUpperCase']())),document['getElementById']('listitems')[_0x2ca8bf(0xbd)]='';for(let _0x5927ed=0x0;_0x5927ed<_0x2a3947[_0x2ca8bf(0x141)];_0x5927ed++){_0x2a3947[_0x5927ed][_0x2ca8bf(0x188)]('id',_0x2ca8bf(0x12f)+parseInt(_0x5927ed)),document['getElementById']('listitems')[_0x2ca8bf(0x1c0)](_0x2a3947[_0x5927ed]),_0x1e37a7[_0x2ca8bf(0x13b)](_0x2a3947[_0x5927ed][_0x2ca8bf(0x1e3)][0x0]['id']);}currentMarkers=_0x1e37a7[_0x2ca8bf(0x184)]((_0x19ffb6,_0x274e01)=>_0x19ffb6['concat'](currentMarkers[_0x2ca8bf(0xcd)](_0x42ee9b=>_0x42ee9b[_0x2ca8bf(0x1f7)]==_0x274e01)),[]);}function deleteFilterInput(){var _0x335453=_0x809298;document[_0x335453(0x1b9)]('filterInput')[_0x335453(0xec)]='',filterListitems();}document[_0x809298(0x1b9)]('nightBtn')[_0x809298(0x16c)](_0x809298(0x205),setDayNightUi);function setDayNightUi(){var _0x35d305=_0x809298;document[_0x35d305(0x193)][_0x35d305(0x185)](_0x35d305(0x1f5))==_0x35d305(0x209)?(document[_0x35d305(0x1b9)](_0x35d305(0x19f))[_0x35d305(0x10d)][_0x35d305(0xcf)](_0x35d305(0x1e6)),document[_0x35d305(0x1b9)]('navbar')[_0x35d305(0x10d)]['remove'](_0x35d305(0x16a)),document[_0x35d305(0x1b9)](_0x35d305(0x20e))[_0x35d305(0x10d)][_0x35d305(0xcf)]('bg-light'),document[_0x35d305(0x1b9)](_0x35d305(0x20e))[_0x35d305(0x10d)][_0x35d305(0x15c)]('bg-dark'),document[_0x35d305(0x1b9)](_0x35d305(0x166))[_0x35d305(0x10d)][_0x35d305(0xcf)]('btn-light'),document[_0x35d305(0x1b9)](_0x35d305(0x166))[_0x35d305(0x10d)][_0x35d305(0x15c)](_0x35d305(0x14e)),document['getElementById'](_0x35d305(0x183))[_0x35d305(0x10d)][_0x35d305(0xcf)]('btn-light'),document[_0x35d305(0x1b9)]('transportBtn')['classList']['remove'](_0x35d305(0x14e)),document[_0x35d305(0x1b9)](_0x35d305(0x116))['classList'][_0x35d305(0xcf)](_0x35d305(0x153)),document[_0x35d305(0x1b9)](_0x35d305(0x116))[_0x35d305(0x10d)][_0x35d305(0x15c)](_0x35d305(0x14e)),document[_0x35d305(0x1b9)](_0x35d305(0x143))['classList'][_0x35d305(0xcf)](_0x35d305(0x153)),document['getElementById']('nightBtn')[_0x35d305(0x10d)][_0x35d305(0x15c)](_0x35d305(0x14e)),document[_0x35d305(0x1b9)](_0x35d305(0x1de))[_0x35d305(0x10d)][_0x35d305(0xcf)]('btn-light'),document[_0x35d305(0x1b9)](_0x35d305(0x1de))[_0x35d305(0x10d)][_0x35d305(0x15c)]('btn-dark'),document[_0x35d305(0x1b9)](_0x35d305(0x18c))[_0x35d305(0x10d)]['add']('btn-light'),document['getElementById'](_0x35d305(0x18c))[_0x35d305(0x10d)]['remove'](_0x35d305(0x14e)),document['getElementById'](_0x35d305(0x175))[_0x35d305(0x10d)][_0x35d305(0xcf)](_0x35d305(0x182)),document[_0x35d305(0x1b9)](_0x35d305(0x175))['classList'][_0x35d305(0x15c)](_0x35d305(0x20f)),document[_0x35d305(0x193)][_0x35d305(0x188)](_0x35d305(0x1f5),_0x35d305(0x207)),document[_0x35d305(0x1b9)](_0x35d305(0x19f))[_0x35d305(0x188)]('data-bs-theme',_0x35d305(0x207)),document[_0x35d305(0x189)][_0x35d305(0x10d)][_0x35d305(0x14c)](_0x35d305(0x1fe))):(document['getElementById'](_0x35d305(0x19f))[_0x35d305(0x10d)]['add'](_0x35d305(0x16a)),document[_0x35d305(0x1b9)](_0x35d305(0x19f))[_0x35d305(0x10d)]['remove'](_0x35d305(0x1e6)),document[_0x35d305(0x1b9)](_0x35d305(0x20e))[_0x35d305(0x10d)]['add'](_0x35d305(0x16a)),document[_0x35d305(0x1b9)](_0x35d305(0x20e))[_0x35d305(0x10d)][_0x35d305(0x15c)]('bg-light'),document[_0x35d305(0x1b9)]('mapLayerBtn')[_0x35d305(0x10d)][_0x35d305(0xcf)](_0x35d305(0x14e)),document[_0x35d305(0x1b9)](_0x35d305(0x166))[_0x35d305(0x10d)]['remove'](_0x35d305(0x153)),document['getElementById'](_0x35d305(0x183))[_0x35d305(0x10d)][_0x35d305(0xcf)]('btn-dark'),document['getElementById'](_0x35d305(0x183))[_0x35d305(0x10d)][_0x35d305(0x15c)](_0x35d305(0x153)),document[_0x35d305(0x1b9)](_0x35d305(0x116))['classList'][_0x35d305(0xcf)](_0x35d305(0x14e)),document['getElementById']('settingsBtn')[_0x35d305(0x10d)][_0x35d305(0x15c)](_0x35d305(0x153)),document[_0x35d305(0x1b9)](_0x35d305(0x143))[_0x35d305(0x10d)]['add'](_0x35d305(0x14e)),document[_0x35d305(0x1b9)](_0x35d305(0x143))[_0x35d305(0x10d)]['remove'](_0x35d305(0x153)),document['getElementById'](_0x35d305(0x1de))[_0x35d305(0x10d)][_0x35d305(0xcf)]('btn-dark'),document[_0x35d305(0x1b9)](_0x35d305(0x1de))[_0x35d305(0x10d)][_0x35d305(0x15c)](_0x35d305(0x153)),document[_0x35d305(0x1b9)](_0x35d305(0x18c))[_0x35d305(0x10d)][_0x35d305(0xcf)](_0x35d305(0x14e)),document[_0x35d305(0x1b9)](_0x35d305(0x18c))[_0x35d305(0x10d)]['remove'](_0x35d305(0x153)),document[_0x35d305(0x1b9)](_0x35d305(0x175))[_0x35d305(0x10d)][_0x35d305(0xcf)](_0x35d305(0x20f)),document['getElementById'](_0x35d305(0x175))[_0x35d305(0x10d)][_0x35d305(0x15c)]('bi-moon-stars-fill'),document[_0x35d305(0x193)][_0x35d305(0x188)]('data-bs-theme',_0x35d305(0x209)),document[_0x35d305(0x1b9)](_0x35d305(0x19f))['setAttribute'](_0x35d305(0x1f5),'dark'),document[_0x35d305(0x189)][_0x35d305(0x10d)][_0x35d305(0x14c)]('c_darkmode'));}document[_0x809298(0x16c)](_0x809298(0x11d),getDayNightUi,![]);function getDayNightUi(){var _0x216c1=_0x809298;window[_0x216c1(0x214)](_0x216c1(0x174))[_0x216c1(0x1b1)]?(document[_0x216c1(0x1b9)](_0x216c1(0x19f))[_0x216c1(0x10d)][_0x216c1(0xcf)](_0x216c1(0x16a)),document[_0x216c1(0x1b9)](_0x216c1(0x19f))[_0x216c1(0x10d)][_0x216c1(0x15c)](_0x216c1(0x1e6)),document[_0x216c1(0x1b9)](_0x216c1(0x20e))[_0x216c1(0x10d)][_0x216c1(0xcf)](_0x216c1(0x16a)),document[_0x216c1(0x1b9)](_0x216c1(0x20e))[_0x216c1(0x10d)][_0x216c1(0x15c)]('bg-light'),document[_0x216c1(0x1b9)](_0x216c1(0x166))['classList']['add'](_0x216c1(0x14e)),document[_0x216c1(0x1b9)](_0x216c1(0x166))[_0x216c1(0x10d)]['remove'](_0x216c1(0x153)),document[_0x216c1(0x1b9)](_0x216c1(0x183))['classList'][_0x216c1(0xcf)]('btn-dark'),document['getElementById'](_0x216c1(0x183))[_0x216c1(0x10d)][_0x216c1(0x15c)](_0x216c1(0x153)),document[_0x216c1(0x1b9)]('settingsBtn')[_0x216c1(0x10d)][_0x216c1(0xcf)](_0x216c1(0x14e)),document['getElementById']('settingsBtn')[_0x216c1(0x10d)][_0x216c1(0x15c)](_0x216c1(0x153)),document[_0x216c1(0x1b9)](_0x216c1(0x143))[_0x216c1(0x10d)][_0x216c1(0xcf)](_0x216c1(0x14e)),document['getElementById']('nightBtn')['classList'][_0x216c1(0x15c)]('btn-light'),document[_0x216c1(0x1b9)]('cryptoBtn')[_0x216c1(0x10d)][_0x216c1(0xcf)]('btn-dark'),document[_0x216c1(0x1b9)](_0x216c1(0x1de))[_0x216c1(0x10d)][_0x216c1(0x15c)](_0x216c1(0x153)),document['getElementById'](_0x216c1(0x18c))[_0x216c1(0x10d)][_0x216c1(0xcf)](_0x216c1(0x14e)),document[_0x216c1(0x1b9)](_0x216c1(0x18c))[_0x216c1(0x10d)][_0x216c1(0x15c)](_0x216c1(0x153)),document[_0x216c1(0x1b9)](_0x216c1(0x175))[_0x216c1(0x10d)][_0x216c1(0xcf)](_0x216c1(0x20f)),document[_0x216c1(0x1b9)](_0x216c1(0x175))['classList']['remove']('bi-moon-stars-fill'),document[_0x216c1(0x193)][_0x216c1(0x188)](_0x216c1(0x1f5),_0x216c1(0x209)),document[_0x216c1(0x1b9)](_0x216c1(0x19f))[_0x216c1(0x188)](_0x216c1(0x1f5),_0x216c1(0x209)),document[_0x216c1(0x189)][_0x216c1(0x10d)][_0x216c1(0x14c)]('c_darkmode')):(document[_0x216c1(0x1b9)](_0x216c1(0x19f))[_0x216c1(0x10d)][_0x216c1(0xcf)](_0x216c1(0x1e6)),document[_0x216c1(0x1b9)](_0x216c1(0x19f))['classList'][_0x216c1(0x15c)](_0x216c1(0x16a)),document[_0x216c1(0x1b9)](_0x216c1(0x20e))[_0x216c1(0x10d)]['add'](_0x216c1(0x1e6)),document[_0x216c1(0x1b9)]('sidebar-wrapper')[_0x216c1(0x10d)][_0x216c1(0x15c)](_0x216c1(0x16a)),document[_0x216c1(0x1b9)](_0x216c1(0x166))[_0x216c1(0x10d)][_0x216c1(0xcf)](_0x216c1(0x153)),document['getElementById']('mapLayerBtn')[_0x216c1(0x10d)]['remove'](_0x216c1(0x14e)),document[_0x216c1(0x1b9)](_0x216c1(0x183))[_0x216c1(0x10d)][_0x216c1(0xcf)]('btn-light'),document[_0x216c1(0x1b9)](_0x216c1(0x183))[_0x216c1(0x10d)][_0x216c1(0x15c)](_0x216c1(0x14e)),document['getElementById'](_0x216c1(0x116))[_0x216c1(0x10d)][_0x216c1(0xcf)](_0x216c1(0x153)),document[_0x216c1(0x1b9)](_0x216c1(0x116))[_0x216c1(0x10d)]['remove']('btn-dark'),document[_0x216c1(0x1b9)](_0x216c1(0x143))[_0x216c1(0x10d)]['add'](_0x216c1(0x153)),document[_0x216c1(0x1b9)]('nightBtn')[_0x216c1(0x10d)][_0x216c1(0x15c)](_0x216c1(0x14e)),document['getElementById'](_0x216c1(0x1de))[_0x216c1(0x10d)][_0x216c1(0xcf)]('btn-light'),document[_0x216c1(0x1b9)](_0x216c1(0x1de))['classList']['remove'](_0x216c1(0x14e)),document[_0x216c1(0x1b9)](_0x216c1(0x18c))[_0x216c1(0x10d)]['add'](_0x216c1(0x153)),document[_0x216c1(0x1b9)](_0x216c1(0x18c))[_0x216c1(0x10d)]['remove'](_0x216c1(0x14e)),document[_0x216c1(0x1b9)](_0x216c1(0x175))['classList'][_0x216c1(0xcf)](_0x216c1(0x182)),document[_0x216c1(0x1b9)](_0x216c1(0x175))[_0x216c1(0x10d)]['remove'](_0x216c1(0x20f)),document['documentElement'][_0x216c1(0x188)]('data-bs-theme','light'),document['getElementById']('navbar')[_0x216c1(0x188)](_0x216c1(0x1f5),_0x216c1(0x207)));}document['addEventListener'](_0x809298(0x11d),toggleSidebar,![]);function toggleSidebar(){var _0xf7fe76=_0x809298;document[_0xf7fe76(0x1b9)](_0xf7fe76(0x1c1))['click']();}document['querySelector'](_0x809298(0x1a1))['addEventListener'](_0x809298(0x205),function(){var _0x4a4751=_0x809298;this[_0x4a4751(0x10d)][_0x4a4751(0x14c)](_0x4a4751(0x196));}),document[_0x809298(0x16c)](_0x809298(0x11d),setRadioState,![]);function setRadioState(){var _0x25ca49=_0x809298;geolocSwitch===![]?document['getElementById']('flexSwitchCheckDefault5')['checked']=![]:document[_0x25ca49(0x1b9)](_0x25ca49(0x110))[_0x25ca49(0x109)]=!![],imperialUnits===![]?document[_0x25ca49(0x1b9)](_0x25ca49(0xd0))[_0x25ca49(0x109)]=![]:document['getElementById'](_0x25ca49(0xd0))[_0x25ca49(0x109)]=!![],roundtripMode===![]?document['getElementById']('flexSwitchCheckDefault8')[_0x25ca49(0x109)]=![]:document[_0x25ca49(0x1b9)](_0x25ca49(0xc7))[_0x25ca49(0x109)]=!![];}document['addEventListener']('DOMContentLoaded',setTransportState,![]);function setTransportState(){var _0xd4b45b=_0x809298;switch(transportMode){case _0xd4b45b(0xc6):document[_0xd4b45b(0x1b9)](_0xd4b45b(0xc6))[_0xd4b45b(0x109)]=!![];break;case'bike':document[_0xd4b45b(0x1b9)](_0xd4b45b(0x139))[_0xd4b45b(0x109)]=!![];break;case _0xd4b45b(0xe7):document[_0xd4b45b(0x1b9)]('foot')[_0xd4b45b(0x109)]=!![];break;default:document['getElementById']('driving')['checked']=!![];break;}}window['matchMedia']('(max-width:\x201000px)')['addEventListener']('change',function(_0xda353d){var _0x787bd4=_0x809298;if(_0xda353d[_0x787bd4(0x1b1)]){}else return![];});var fileInput1=document[_0x809298(0x1b9)](_0x809298(0xc8));fileInput1[_0x809298(0x16c)](_0x809298(0xff),async function main(){var _0x3822dc=_0x809298;try{const _0x4b0b76=await toJson();csvData=[],csvData['push'](_0x4b0b76),modCsvData();}catch(_0x161540){console[_0x3822dc(0x1e9)]('Could\x20not\x20parse\x20the\x20file.',_0x161540);}});function toJson(){var _0x30186d=_0x809298,_0x45ddfe=fileInput1[_0x30186d(0x102)][0x0];return new Promise((_0x261d36,_0x4690a2)=>{Papa['parse'](_0x45ddfe,{'complete'(_0x2cf4b8,_0x1feb03){var _0x29e0df=_0x4b15;_0x261d36(_0x2cf4b8[_0x29e0df(0x203)]);},'error'(_0x4997a2,_0x701ec0){_0x4690a2(_0x4997a2);}});});}function modCsvData(){var _0x5071c3=_0x809298;let _0x184b87=[],_0xe2414f=0x0,_0x3d0a6b=0x0;for(i=0x0;i<csvData[0x0][_0x5071c3(0x141)];i++){_0x184b87[_0x5071c3(0x13b)](csvData[0x0][i]['join']());}setInterval(_0x42b087,0x9c4);function _0x42b087(){if(_0xe2414f<_0x184b87['length'])return _0xe2414f++,new Promise(function(_0x50763f,_0x59feb5){var _0x105e34=_0x4b15;axios[_0x105e34(0xbe)](_0x105e34(0x1f2)+_0x105e34(0xef)+_0x184b87[_0xe2414f]+_0x105e34(0x173))['then'](_0x1744e3=>{var _0x39e06d=_0x105e34,_0x2f7c92=_0x1744e3[_0x39e06d(0x203)];_0x50763f(_0x2f7c92[0x0]);if(_0x2f7c92[0x0]===undefined)console[_0x39e06d(0x1b8)](_0x39e06d(0x212)),_0x3d0a6b++;else{_0x2f98b7();async function _0x2f98b7(){var _0xc1f49f=_0x39e06d;const _0x382b12=[_0x2f7c92[0x0][_0xc1f49f(0x1e0)],_0x2f7c92[0x0][_0xc1f49f(0xf9)]];var _0x48f85d=new L[(_0xc1f49f(0xf7))](_0x382b12,{'icon':L['BeautifyIcon']['icon'](options)})[_0xc1f49f(0xd9)](map);currentMarkers[_0xc1f49f(0x13b)](_0x48f85d);var _0x5b7a78=await reverseGeocode(_0x2f7c92[0x0][_0xc1f49f(0x1e0)],_0x2f7c92[0x0][_0xc1f49f(0xf9)]),_0x562004=getDistance(userLoc,[_0x2f7c92[0x0]['lat'],_0x2f7c92[0x0][_0xc1f49f(0xf9)]]),_0x151552;userLoc[_0xc1f49f(0x141)]===0x0?_0x151552='':_0x151552='▸'+_0x562004+_0xc1f49f(0x12d),document[_0xc1f49f(0x1b9)]('listitems')[_0xc1f49f(0xbd)]+=_0xc1f49f(0xe1)+(currentMarkers[_0xc1f49f(0x141)]-0x1)+_0xc1f49f(0x1f4)+_0x5b7a78+_0xc1f49f(0x154)+_0x151552+_0xc1f49f(0x1ba)+currentMarkers[currentMarkers['length']-0x1][_0xc1f49f(0x1f7)]+'\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<i\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20class=\x22bi\x20bi-x-square-fill\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20onclick=\x22removeListLoc(parentNode.parentNode.id)\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<i\x20class=\x22bi\x20bi-zoom-in\x22\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20onclick=\x22flyToMarker('+currentMarkers[currentMarkers['length']-0x1][_0xc1f49f(0x1c8)][_0xc1f49f(0x1e0)]+_0xc1f49f(0xc0)+currentMarkers[currentMarkers['length']-0x1]['_latlng'][_0xc1f49f(0x1a4)]+_0xc1f49f(0x112),markerCount++,document['getElementById'](_0xc1f49f(0x211))[_0xc1f49f(0xbd)]=''+markerCount,document['getElementById'](_0xc1f49f(0x105))[_0xc1f49f(0x169)][_0xc1f49f(0x20d)]=_0xc1f49f(0xc5);}}},_0x1f1241=>{_0x59feb5(_0x1f1241);}),document['getElementById']('closeModal')[_0x105e34(0x205)]();});else return;}}function pastePriv(){var _0x466c39=_0x809298;document[_0x466c39(0x1b9)](_0x466c39(0x128))[_0x466c39(0xbd)]='',document[_0x466c39(0x1b9)](_0x466c39(0x128))[_0x466c39(0xbd)]+=_0x466c39(0x1cc);}function pasteTerms(){var _0x4b3e74=_0x809298;document[_0x4b3e74(0x1b9)]('contentTos')[_0x4b3e74(0xbd)]='',document[_0x4b3e74(0x1b9)]('contentTos')[_0x4b3e74(0xbd)]+=_0x4b3e74(0xf2);}
+    </script>
+  </body>
+</html>
