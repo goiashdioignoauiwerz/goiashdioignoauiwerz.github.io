@@ -215,7 +215,11 @@
     <!-- Navbar -->
     <nav class="navbar bg-light" id="navbar">
       <div class="container-fluid">
-        <button class="navbar-toggler ms-1 me-3" type="button" id="infoBtn">
+        <button
+          class="navbar-toggler ms-1 me-3 btn-outline-primary"
+          type="button"
+          id="infoBtn"
+        >
           <span class="navbar-toggler-icon" id="navbar-toggler-icon"></span>
         </button>
         <a class="navbar-brand d-row me-5 ms-0" id="logo">
@@ -231,7 +235,7 @@
             <b>ShortestRoute</b>
             <h6>
               <span class="badge text-bg-success ms-2 text-wrap badgeLogo">
-                v0.9
+                v0.95
               </span>
             </h6>
           </div>
@@ -250,7 +254,7 @@
               />
               <button
                 type="button"
-                class="btn btn btn-primary"
+                class="btn btn btn-outline-primary"
                 id="searchBtn"
                 onclick="getGeoData(event)"
               >
@@ -258,45 +262,11 @@
               </button>
               <button
                 type="button"
-                class="btn btn btn-primary"
+                class="btn btn btn-outline-primary"
                 id="deleteBtn"
                 onclick="clearSearchBar()"
               >
                 <i class="bi bi-backspace-fill"></i>
-              </button>
-              <button
-                type="button"
-                class="btn btn btn-primary"
-                id="smallPinBtn"
-                onclick="actDeactMarking()"
-              >
-                <i class="bi bi-geo-alt-fill"></i>
-              </button>
-              <button
-                type="button"
-                class="btn btn btn-primary"
-                id="smallRouteBtn"
-                onclick="getRoute()"
-              >
-                <i class="bi bi-bounding-box"></i>
-              </button>
-              <button
-                type="button"
-                class="btn btn btn-primary"
-                id="smallNavBtn"
-                onclick="createMapsUrl()"
-                disabled
-              >
-                <i class="bi bi-sign-turn-right-fill"></i>
-              </button>
-              <button
-                type="button"
-                class="btn btn btn-primary"
-                id="smallReturnBtn"
-                onclick="goBack()"
-                disabled
-              >
-                <i class="bi bi-arrow-clockwise"></i>
               </button>
             </form>
           </div>
@@ -324,6 +294,15 @@
           ></a>
           <button type="button" class="btn btn-light" id="nightBtn">
             <i class="bi bi-moon-stars-fill" id="moonIcon"></i>
+          </button>
+          <button
+            type="button"
+            class="btn btn-light"
+            id="questionBtn"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
+          >
+            <i class="bi bi-question-lg"></i>
           </button>
         </div>
       </div>
@@ -630,7 +609,7 @@
     </div>
     <!-- Sidebar -->
     <div
-      class="side-navbar active-nav d-flex justify-content-between flex-wrap flex-column bg-light"
+      class="side-navbar active-nav d-flex justify-content-between flex-column bg-light"
       id="sidebar-wrapper"
     >
       <div class="nav flex-column w-100 m-1">
@@ -1117,19 +1096,19 @@
         </footer>
       </div>
     </div>
-    <!-- TOS / PP -->
+    <!-- Help -->
     <div
       class="modal fade"
       id="exampleModal"
       tabindex="-1"
-      aria-labelledby="exampleModalLabel"
+      aria-labelledby="helpModal"
       aria-hidden="true"
     >
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">
-              Frequently Asked Questions
+            <h5 class="modal-title" id="helpModal">
+              How do I add map markers?
             </h5>
             <button
               type="button"
@@ -1140,31 +1119,29 @@
           </div>
           <div class="modal-body">
             <p class="d-block w-60 carou-padding">
-              <b> How do I add location markers?</b> <br />
               Via address search and then clicking on the right-hand marker
               symbol. Or via clicking on "Add" (marker symbol) before clicking
               on a location on the map. Or via uploading a CSV file containing
               all address data which will be added one-per-one. To start this
-              process, click on the "Import" button.<br /><br />
-              <b> How do I calculate a route? </b> <br />
-              You first need to add all location markers, then click on the
-              "Route" button (quadrangle symbol). The optimized route, waypoints
-              and directions will be displayed.<br /><br />
-              <b> What is the "Back" button for? </b><br />
-              For making changes in your route planning you have the option go
-              back one-step (i.e. to add or delete location markers).<br /><br />
-              <b> How can I download my data? </b> <br />
-              You can either download the route plan as a PDF incl. a map
-              screenshot via clicking on "Print" or export the route trace as a
-              GPX and CSV file by clicking on "Export".<br /><br />
-              <b> How can I navigate on my route? </b><br />
-              You can drive the calculated route by clicking the "Navigate"
-              button (road sign symbol) which will start Google Maps. If you
-              want to walk or cycle, you can also use the "Locate Me" map
-              pointer by opening "Settings".
+              process, click on the "Import" button.
+              <video controls width="300" autoplay="false">
+                <source
+                  src="/resources/webm/dropmarkers.webm"
+                  type="video/webm"
+                />
+              </video>
             </p>
           </div>
           <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-dismiss="modal"
+              data-bs-target="#modalToggle2"
+              data-bs-toggle="modal"
+            >
+              Next
+            </button>
             <button
               type="button"
               class="btn btn-secondary"
@@ -1176,17 +1153,296 @@
         </div>
       </div>
     </div>
-    <!-- Help -->
-    <div style="margin: 0 auto; position: block">
+    <div
+      class="modal fade"
+      id="modalToggle2"
+      aria-hidden="true"
+      aria-labelledby="modalToggleLabel2"
+      tabindex="-1"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="modalToggleLabel2">
+              How do I calculate a route?
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p class="d-block w-60 carou-padding">
+              You first need to add all location markers, then click on the
+              "Route" button (quadrangle symbol). The optimized route, waypoints
+              and directions will be displayed.
+              <video controls width="300" autoplay="false">
+                <source
+                  src="/resources/webm/calcroute.webm"
+                  type="video/webm"
+                />
+              </video>
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+            >
+              Back
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-target="#modalToggle3"
+              data-bs-toggle="modal"
+            >
+              Next
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="modal fade"
+      id="modalToggle3"
+      aria-hidden="true"
+      aria-labelledby="modalToggleLabel3"
+      tabindex="-1"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="modalToggleLabel3">
+              What is the "Back" button for?
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p class="d-block w-60 carou-padding">
+              For making changes in your route planning you have the option go
+              back one-step (i.e. to add or delete location markers).
+              <video controls width="300" autoplay="false">
+                <source src="/resources/webm/goback.webm" type="video/webm" />
+              </video>
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-primary"
+              data-bs-dismiss="modal"
+              data-bs-toggle="modal"
+              data-bs-target="#modalToggle2"
+            >
+              Back
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-dismiss="modal"
+              data-bs-target="#modalToggle4"
+              data-bs-toggle="modal"
+            >
+              Next
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="modalToggle4"
+      aria-hidden="true"
+      aria-labelledby="modalToggleLabel4"
+      tabindex="-1"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="modalToggleLabel4">
+              How do I export my data?
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p class="d-block w-60 carou-padding">
+              You can either download the route plan as a PDF incl. a map
+              screenshot via clicking on "Print" or export the route trace as a
+              GPX and CSV file by clicking on "Export".
+              <video controls width="300" autoplay="false">
+                <source src="/resources/webm/export.webm" type="video/webm" />
+              </video>
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-primary"
+              data-bs-dismiss="modal"
+              data-bs-toggle="modal"
+              data-bs-target="#modalToggle3"
+            >
+              Back
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-dismiss="modal"
+              data-bs-target="#modalToggle5"
+              data-bs-toggle="modal"
+            >
+              Next
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="modal fade"
+      id="modalToggle5"
+      aria-hidden="true"
+      aria-labelledby="modalToggleLabel5"
+      tabindex="-1"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="modalToggleLabel5">
+              How can I navigate on my route?
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p class="d-block w-60 carou-padding">
+              You can drive the calculated route by clicking the "Navigate"
+              button (road sign symbol) which will start Google Maps. If you
+              want to walk or cycle, you can also use the "Locate Me" map
+              pointer by opening "Settings".
+              <img
+                width="275"
+                class="disc-picture"
+                src="/resources/webm/navigate.png"
+                alt="shortestroute how to navigate on calculated route"
+              />
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-primary"
+              data-bs-dismiss="modal"
+              data-bs-toggle="modal"
+              data-bs-target="#modalToggle4"
+            >
+              Back
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Sidebar -->
+    <div
+      class="btn-group-vertical btn-group-lg position-absolute top-50 start-0 translate-middle-y"
+      id="mobileSidebar"
+    >
       <button
         type="button"
-        class="btn btn-secondary btn-sm rounded-circle"
-        style="position: absolute; bottom: 2em; left: 1em"
+        class="btn btn btn-primary"
+        id="smallPinBtn"
+        onclick="actDeactMarking()"
+      >
+        <i class="bi bi-geo-alt-fill"></i>
+      </button>
+      <button
+        type="button"
+        class="btn btn btn-info"
+        id="smallRouteBtn"
+        onclick="getRoute()"
+      >
+        <i class="bi bi-bounding-box"></i>
+      </button>
+      <button
+        type="button"
+        class="btn btn btn-warning"
+        id="smallReturnBtn"
+        onclick="goBack()"
+        disabled
+      >
+        <i class="bi bi-arrow-clockwise"></i>
+      </button>
+      <button
+        type="button"
+        class="btn btn btn-danger"
+        id="smallNavBtn"
+        onclick="createMapsUrl()"
+        disabled
+      >
+        <i class="bi bi-sign-turn-right-fill"></i>
+      </button>
+      <button
+        type="button"
+        class="btn btn btn-secondary"
+        id="smallQuestionBtn"
         data-bs-toggle="modal"
         data-bs-target="#exampleModal"
       >
-        <b>?</b>
+        <i class="bi bi-question-lg"></i>
       </button>
+      <a
+        type="button"
+        class="btn btn btn-success"
+        id="smallDonateBtn"
+        href="https://liberapay.com/ShortestRoute/donate"
+        target="_blank"
+      >
+        <i class="bi bi-cup-hot-fill"></i>
+      </a>
     </div>
     <!-- Bootstrap -->
     <script
